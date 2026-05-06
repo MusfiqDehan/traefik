@@ -20,6 +20,8 @@ api:
   dashboard: false
   insecure: false
 
+ping: {}
+
 # ── Entry Points ─────────────────────────────
 entryPoints:
   web:
