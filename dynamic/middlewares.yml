@@ -1,0 +1,36 @@
+# ─────────────────────────────────────────────
+# Middlewares — Reusable HTTP middleware chains
+# Reference in labels as:  <name>@file
+# ─────────────────────────────────────────────
+
+http:
+  middlewares:
+
+    # ── Security Headers ─────────────────────
+    # Applied to all routers via docker-compose labels.
+    security-headers:
+      headers:
+        # Tell Django (and browsers) this came in over HTTPS.
+        customRequestHeaders:
+          X-Forwarded-Proto: "https"
+        customResponseHeaders:
+          X-Content-Type-Options: "nosniff"
+          X-Frame-Options: "SAMEORIGIN"
+          Referrer-Policy: "strict-origin-when-cross-origin"
+          X-XSS-Protection: "1; mode=block"
+        # HSTS: 1 year, include subdomains
+        stsSeconds: 31536000
+        stsIncludeSubdomains: true
+        forceSTSHeader: true
+
+    # ── Compression ──────────────────────────
+    compress:
+      compress: {}
+
+    # ── Rate Limiting (API protection) ───────
+    # Adjust burst/average to suit your traffic.
+    api-ratelimit:
+      rateLimit:
+        average: 100
+        burst: 50
+        period: 1s
