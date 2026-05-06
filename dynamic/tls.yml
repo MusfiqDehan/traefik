@@ -1,0 +1,21 @@
+# ─────────────────────────────────────────────
+# TLS — Cloudflare Origin Certificate
+# Covers: musfiqdehan.com + *.musfiqdehan.com
+# ─────────────────────────────────────────────
+
+tls:
+  # Default certificate used for all HTTPS routes that don't
+  # declare their own certResolver or certFile.
+  stores:
+    default:
+      defaultCertificate:
+        certFile: /certs/origin.pem
+        keyFile: /certs/origin.key
+
+  # Explicitly register the wildcard cert so Traefik picks it
+  # up immediately on start and for HostRegexp routes.
+  certificates:
+    - certFile: /certs/origin.pem
+      keyFile: /certs/origin.key
+      stores:
+        - default
