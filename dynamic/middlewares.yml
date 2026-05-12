@@ -34,3 +34,13 @@ http:
         average: 100
         burst: 50
         period: 1s
+
+    # ── WebSocket upgrade passthrough ────────
+    # Required for Daphne/Django Channels (/ws/ paths).
+    # Traefik passes Upgrade headers automatically for wss:// but this
+    # middleware makes it explicit and prevents stripping by other middleware.
+    ws-headers:
+      headers:
+        customRequestHeaders:
+          Connection: "Upgrade"
+          Upgrade: "websocket"
