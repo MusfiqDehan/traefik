@@ -2,18 +2,18 @@
 # Traefik v3.6 — Reverse Proxy
 #
 # Usage (from repo root):
-#   docker compose -f traefik/docker-compose.traefik.yml up -d
+#   docker compose -f shared/traefik/docker-compose.traefik.yml up -d
 #
 # This MUST be started before the backend and frontend stacks.
 # It owns the `traefik_proxy` external network that both stacks attach to.
 #
 # Cert placement:
-#   Copy Cloudflare origin cert files into ./traefik/certs/
+#   Copy Cloudflare origin cert files into ./shared/traefik/certs/
 #     origin.pem  — public cert (wildcard *.fitssort.com)
 #     origin.key  — private key
 #
 # Let's Encrypt fallback:
-#   Export HOSTINGER_API_TOKEN or pass --env-file traefik/.env when starting Traefik.
+#   Export HOSTINGER_API_TOKEN or pass --env-file shared/traefik/.env when starting Traefik.
 # ─────────────────────────────────────────────────────────────────────────────
 
 services:

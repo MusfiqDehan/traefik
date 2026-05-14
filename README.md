@@ -33,6 +33,17 @@ The expected flow is:
 - A valid Cloudflare Origin Certificate for `fitssort.com` and `*.fitssort.com`, or a Hostinger API token so Let's Encrypt can issue one
 - Backend and frontend services configured to join the `traefik_proxy` network
 
+## DNS Requirements
+
+Wildcard DNS does **not** cover the apex domain. To serve both the landing page and tenant subdomains, create both records:
+
+1. `fitssort.com` → A/AAAA record pointing to your server
+2. `*.fitssort.com` → wildcard record pointing to the same server
+
+If you are using Cloudflare proxying, proxy both records to the same origin. If only the wildcard record exists, `https://fitssort.com` will not resolve to your landing page.
+
+Do **not** leave extra A/AAAA/CNAME records for the same hostnames pointing to Hostinger parking, an old VPS, or any other origin. DNS round-robin across mixed targets will make `fitssort.com` and `*.fitssort.com` intermittently load different sites depending on which record the resolver returns.
+
 ## Certificate Setup
 
 Traefik supports two certificate sources in this setup:
@@ -40,7 +51,7 @@ Traefik supports two certificate sources in this setup:
 1. Cloudflare Origin Certificate from [certs/](certs/)
 2. Let's Encrypt fallback through a Hostinger DNS-01 challenge
 
-When [certs/origin.pem](certs/origin.pem) and [certs/origin.key](certs/origin.key) exist, Traefik loads them as the default wildcard certificate. The production backend and frontend routers also declare the `letsencrypt` certificate resolver, so if that origin certificate is missing or not loaded, Traefik can request a browser-trusted certificate from Let's Encrypt for `fitssort.com` and `*.fitssort.com`.
+When [certs/origin.pem](certs/origin.pem) and [certs/origin.key](certs/origin.key) exist **and the certificate blocks in** [dynamic/tls.yml](dynamic/tls.yml) **are uncommented**, Traefik loads them as the default wildcard certificate. The production backend and frontend routers also declare the `letsencrypt` certificate resolver, so if that origin certificate is missing or not loaded, Traefik can request a browser-trusted certificate from Let's Encrypt for `fitssort.com` and `*.fitssort.com`.
 
 ### Cloudflare Origin Certificate
 
@@ -71,10 +82,10 @@ export HOSTINGER_API_TOKEN="your-hostinger-token"
 Or create a local, ignored env file from the example:
 
 ```bash
-cp traefik/.env.example traefik/.env
+cp shared/traefik/.env.example shared/traefik/.env
 ```
 
-Then edit [traefik/.env](.env) with the real token and start Traefik with `--env-file traefik/.env`.
+Then edit [shared/traefik/.env](.env) with the real token and start Traefik with `--env-file shared/traefik/.env`.
 
 The ACME account and issued certificates are stored in the Docker volume `traefik_letsencrypt`, mounted at `/letsencrypt` inside the container.
 
@@ -83,16 +94,23 @@ The ACME account and issued certificates are stored in the Docker volume `traefi
 Run Traefik from the repository root:
 
 ```bash
-docker compose -f traefik/docker-compose.traefik.yml up -d
+docker compose -f shared/traefik/docker-compose.traefik.yml up -d
 ```
 
-If using [traefik/.env](.env) for the Let's Encrypt fallback token, run:
+If using [shared/traefik/.env](.env) for the Let's Encrypt fallback token, run:
 
 ```bash
-docker compose --env-file traefik/.env -f traefik/docker-compose.traefik.yml up -d
+docker compose --env-file shared/traefik/.env -f shared/traefik/docker-compose.traefik.yml up -d
 ```
 
 Traefik must be started before the backend and frontend stacks so the shared `traefik_proxy` network exists when those services come up.
+
+Then start the application stacks:
+
+```bash
+docker compose -f apps/gym_app_new_backend/docker-compose.prod.yml up -d --build
+docker compose -f apps/gym_app_new_frontend/docker-compose.prod.yml up -d --build
+```
 
 ## How Routing Works
 
@@ -156,7 +174,7 @@ The trusted Cloudflare IP ranges are important because they allow Traefik to pre
 
 ## TLS Configuration
 
-[dynamic/tls.yml](dynamic/tls.yml) registers the Cloudflare Origin Certificate as the default certificate store and also as an explicit wildcard certificate.
+[dynamic/tls.yml](dynamic/tls.yml) contains the Cloudflare Origin Certificate template. Uncomment it after placing `origin.pem` and `origin.key` in [certs/](certs/) if you want Traefik to load the origin certificate directly.
 
 This ensures that:
 
@@ -168,6 +186,8 @@ The `letsencrypt` ACME resolver in [traefik.yml](traefik.yml) is attached to the
 ## Troubleshooting
 
 - If the browser shows a certificate warning, confirm `origin.pem` and `origin.key` exist in [certs/](certs/) and match the Cloudflare Origin Certificate, or confirm `HOSTINGER_API_TOKEN` is set so the Let's Encrypt fallback can issue a certificate
+- If `https://fitssort.com` does not open but subdomains do, add an apex DNS record for `fitssort.com`; the wildcard record does not match the root domain
+- If `fitssort.com` or a tenant subdomain sometimes shows a Hostinger parked page, remove every stale A/AAAA/CNAME for that hostname that does not point to the Traefik server. Mixed records can silently round-robin between your app and Hostinger's parking edge.
 - If Let's Encrypt fails, check Traefik logs for ACME errors and confirm the Hostinger token can manage DNS records for the `fitssort.com` zone
 - If a service is not reachable, verify it is attached to the `traefik_proxy` network
 - If Traefik cannot find a container, confirm the container has `traefik.enable=true`
