@@ -1,6 +1,6 @@
 # ─────────────────────────────────────────────
 # TLS — Cloudflare Origin Certificate
-# Covers: musfiqdehan.com + *.musfiqdehan.com
+# Covers: fitssort.com + *.fitssort.com
 # ─────────────────────────────────────────────
 
 tls:
