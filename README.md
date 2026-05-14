@@ -2,7 +2,7 @@
 
 This directory contains the Traefik v3 reverse proxy configuration. It is responsible for:
 
-- Terminating HTTPS with a Cloudflare Origin Certificate
+- Terminating HTTPS with a Cloudflare Origin Certificate, with Let's Encrypt fallback
 - Redirecting all HTTP traffic to HTTPS
 - Discovering backend and frontend containers through Docker labels
 - Applying shared middlewares such as security headers, compression, and rate limiting
@@ -25,15 +25,24 @@ The expected flow is:
 2. Port `80` is redirected to `443`
 3. Traefik routes the request to the correct container based on labels
 4. Shared middlewares are applied from the file provider
-5. TLS is served from the Cloudflare origin certificate in `certs/`
+5. TLS is served from the Cloudflare origin certificate in `certs/`, or from Let's Encrypt if the origin certificate is not loaded
 
 ## Requirements
 
 - Docker and Docker Compose
-- A valid Cloudflare Origin Certificate for `musfiqdehan.com` and `*.musfiqdehan.com`
+- A valid Cloudflare Origin Certificate for `fitssort.com` and `*.fitssort.com`, or a Hostinger API token so Let's Encrypt can issue one
 - Backend and frontend services configured to join the `traefik_proxy` network
 
 ## Certificate Setup
+
+Traefik supports two certificate sources in this setup:
+
+1. Cloudflare Origin Certificate from [certs/](certs/)
+2. Let's Encrypt fallback through a Hostinger DNS-01 challenge
+
+When [certs/origin.pem](certs/origin.pem) and [certs/origin.key](certs/origin.key) exist, Traefik loads them as the default wildcard certificate. The production backend and frontend routers also declare the `letsencrypt` certificate resolver, so if that origin certificate is missing or not loaded, Traefik can request a browser-trusted certificate from Let's Encrypt for `fitssort.com` and `*.fitssort.com`.
+
+### Cloudflare Origin Certificate
 
 Traefik expects the following files in [certs/](certs/):
 
@@ -44,10 +53,30 @@ To create the certificate:
 
 1. Open Cloudflare Dashboard
 2. Go to **SSL/TLS** → **Origin Server**
-3. Create a certificate for `musfiqdehan.com` and `*.musfiqdehan.com`
+3. Create a certificate for `fitssort.com` and `*.fitssort.com`
 4. Save the certificate as `origin.pem` and the key as `origin.key`
 
 Do not commit the actual certificate files to git.
+
+### Let's Encrypt Fallback
+
+Wildcard certificates require DNS-01 validation. This setup uses Hostinger's DNS API, so create a Hostinger API token that can manage DNS records for the `fitssort.com` zone.
+
+Then provide it to Traefik as `HOSTINGER_API_TOKEN`. You can export it in the shell:
+
+```bash
+export HOSTINGER_API_TOKEN="your-hostinger-token"
+```
+
+Or create a local, ignored env file from the example:
+
+```bash
+cp traefik/.env.example traefik/.env
+```
+
+Then edit [traefik/.env](.env) with the real token and start Traefik with `--env-file traefik/.env`.
+
+The ACME account and issued certificates are stored in the Docker volume `traefik_letsencrypt`, mounted at `/letsencrypt` inside the container.
 
 ## Start Traefik
 
@@ -55,6 +84,12 @@ Run Traefik from the repository root:
 
 ```bash
 docker compose -f traefik/docker-compose.traefik.yml up -d
+```
+
+If using [traefik/.env](.env) for the Let's Encrypt fallback token, run:
+
+```bash
+docker compose --env-file traefik/.env -f traefik/docker-compose.traefik.yml up -d
 ```
 
 Traefik must be started before the backend and frontend stacks so the shared `traefik_proxy` network exists when those services come up.
@@ -65,17 +100,19 @@ Traefik uses Docker labels to discover services. Containers must:
 
 - Join the `traefik_proxy` network
 - Set `traefik.enable=true`
-- Define router rules such as `Host(...)`
+- Define router rules such as `Host(...)` or `HostRegexp(...)`
 - Point the router to the correct service port
+- Set `traefik.http.routers.<name>.tls.certresolver=letsencrypt` when Let's Encrypt fallback should be available
 
 Example label set:
 
 ```yaml
 labels:
 	- traefik.enable=true
-	- traefik.http.routers.api.rule=Host(`api.musfiqdehan.com`)
+	- traefik.http.routers.api.rule=Host(`api.fitssort.com`)
 	- traefik.http.routers.api.entrypoints=websecure
 	- traefik.http.routers.api.tls=true
+	- traefik.http.routers.api.tls.certresolver=letsencrypt
 	- traefik.http.services.api.loadbalancer.server.port=8000
 	- traefik.http.routers.api.middlewares=security-headers@file,compress@file
 ```
@@ -113,6 +150,7 @@ The [traefik.yml](traefik.yml) file configures:
 - Trusted Cloudflare proxy IP ranges on the `websecure` entry point
 - Docker provider discovery with `exposedByDefault: false`
 - File provider watching the `dynamic/` directory
+- Let's Encrypt ACME resolver using Hostinger DNS-01 challenge
 
 The trusted Cloudflare IP ranges are important because they allow Traefik to preserve the correct forwarded headers when the site is behind Cloudflare.
 
@@ -125,9 +163,12 @@ This ensures that:
 - HTTPS routes have a valid certificate immediately on startup
 - Wildcard host rules work correctly for subdomains
 
+The `letsencrypt` ACME resolver in [traefik.yml](traefik.yml) is attached to the backend and frontend production routers. Their `tls.domains` labels explicitly request `fitssort.com` and `*.fitssort.com`, which is required because Traefik cannot infer ACME domains from a regex-only host rule.
+
 ## Troubleshooting
 
-- If the browser shows a certificate warning, confirm `origin.pem` and `origin.key` exist in [certs/](certs/) and match the Cloudflare Origin Certificate
+- If the browser shows a certificate warning, confirm `origin.pem` and `origin.key` exist in [certs/](certs/) and match the Cloudflare Origin Certificate, or confirm `HOSTINGER_API_TOKEN` is set so the Let's Encrypt fallback can issue a certificate
+- If Let's Encrypt fails, check Traefik logs for ACME errors and confirm the Hostinger token can manage DNS records for the `fitssort.com` zone
 - If a service is not reachable, verify it is attached to the `traefik_proxy` network
 - If Traefik cannot find a container, confirm the container has `traefik.enable=true`
 - If forwarded headers look wrong in the backend, confirm requests are passing through the trusted Cloudflare IP ranges in [traefik.yml](traefik.yml)
