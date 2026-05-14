@@ -9,8 +9,11 @@
 #
 # Cert placement:
 #   Copy Cloudflare origin cert files into ./traefik/certs/
-#     origin.pem  — public cert (wildcard *.musfiqdehan.com)
+#     origin.pem  — public cert (wildcard *.fitssort.com)
 #     origin.key  — private key
+#
+# Let's Encrypt fallback:
+#   Export HOSTINGER_API_TOKEN or pass --env-file traefik/.env when starting Traefik.
 # ─────────────────────────────────────────────────────────────────────────────
 
 services:
@@ -21,6 +24,9 @@ services:
     ports:
       - "80:80"     # HTTP → redirects to HTTPS
       - "443:443"   # HTTPS
+    environment:
+      # Required only when the Let's Encrypt DNS-01 fallback needs to issue or renew certificates.
+      - HOSTINGER_API_TOKEN=${HOSTINGER_API_TOKEN:-}
     volumes:
       # Docker socket (read-only — label discovery only)
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -28,8 +34,10 @@ services:
       - ./traefik.yml:/etc/traefik/traefik.yml:ro
       # Dynamic configuration (TLS + middlewares)
       - ./dynamic:/etc/traefik/dynamic:ro
-      # Cloudflare origin certificates
+      # Optional origin certificates
       - ./certs:/certs:ro
+      # Persistent ACME account and certificates for Let's Encrypt fallback
+      - traefik_letsencrypt:/letsencrypt
     networks:
       - traefik_proxy
     healthcheck:
@@ -43,3 +51,6 @@ networks:
   traefik_proxy:
     name: traefik_proxy
     driver: bridge
+
+volumes:
+  traefik_letsencrypt:
