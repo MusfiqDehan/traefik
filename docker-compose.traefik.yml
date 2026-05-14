@@ -38,6 +38,9 @@ services:
       - ./certs:/certs:ro
       # Persistent ACME account and certificates for Let's Encrypt fallback
       - traefik_letsencrypt:/letsencrypt
+    dns:
+      - "8.8.8.8"
+      - "1.1.1.1"
     networks:
       - traefik_proxy
     healthcheck:
