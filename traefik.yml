@@ -1,6 +1,6 @@
 # ─────────────────────────────────────────────
 # Traefik v3 — Static Configuration
-# Domain: musfiqdehan.com
+# Domain: fitssort.com
 # ─────────────────────────────────────────────
 
 global:
@@ -63,6 +63,21 @@ entryPoints:
         - "2405:8100::/32"
         - "2a06:98c0::/29"
         - "2c0f:f248::/32"
+
+# ── Certificate Resolvers ───────────────────
+# Cloudflare Origin Certificates in dynamic/tls.yml are used when present.
+# Routers can fall back to this ACME resolver when no matching origin cert is loaded.
+certificatesResolvers:
+  letsencrypt:
+    acme:
+      email: musfiqdehan@gmail.com
+      storage: /letsencrypt/acme.json
+      keyType: EC256
+      dnsChallenge:
+        provider: hostinger
+        resolvers:
+          - "1.1.1.1:53"
+          - "1.0.0.1:53"
 
 # ── Providers ────────────────────────────────
 providers:
