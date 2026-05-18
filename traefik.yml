@@ -64,6 +64,17 @@ entryPoints:
         - "2a06:98c0::/29"
         - "2c0f:f248::/32"
 
+  # ── Makeover app — IP-based, HTTP only (no domain / no TLS) ────────────────
+  # Used by makeover-server and makeover-client stacks via Docker labels.
+  # Adding these entrypoints requires a one-time Traefik container recreation:
+  #   docker compose -f docker-compose.traefik.yml up -d
+  # The existing web/websecure routes are unaffected after the ~10s restart.
+  makeover-client:
+    address: ":3000"   # Next.js frontend
+
+  makeover-api:
+    address: ":4000"   # NestJS backend + socket.io WebSocket
+
 # ── Certificate Resolvers ───────────────────
 # Cloudflare Origin Certificates in dynamic/tls.yml are used when present.
 # Routers can fall back to this ACME resolver when no matching origin cert is loaded.
