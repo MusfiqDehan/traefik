@@ -24,6 +24,8 @@ services:
     ports:
       - "80:80"     # HTTP → redirects to HTTPS
       - "443:443"   # HTTPS
+      - "3000:3000" # makeover-client entrypoint (Next.js, HTTP)
+      - "4000:4000" # makeover-api entrypoint (NestJS + socket.io, HTTP)
     environment:
       # Required only when the Let's Encrypt DNS-01 fallback needs to issue or renew certificates.
       - HOSTINGER_API_TOKEN=${HOSTINGER_API_TOKEN:-}
