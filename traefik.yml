@@ -90,6 +90,18 @@ certificatesResolvers:
           - "1.1.1.1:53"
           - "1.0.0.1:53"
 
+  # On-demand certs for tenant-owned custom domains (arbitrary zones we do not
+  # control). Uses the HTTP-01 challenge so each verified custom domain can get
+  # its own Let's Encrypt cert when it first points at this proxy. App-layer
+  # gating (only verified Domain rows resolve to a tenant) limits issuance.
+  customdomains:
+    acme:
+      email: musfiqdehan@gmail.com
+      storage: /letsencrypt/acme-customdomains.json
+      keyType: EC256
+      httpChallenge:
+        entryPoint: web
+
 # ── Providers ────────────────────────────────
 providers:
   # Docker: auto-discover services via container labels
