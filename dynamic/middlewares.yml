@@ -27,6 +27,14 @@ http:
     compress:
       compress: {}
 
+    # ── Explicit HTTP → HTTPS redirect ─────────
+    # Applied only to browser/API routers on the web entrypoint so legacy ADMS
+    # device paths can remain reachable over plain HTTP.
+    redirect-to-https:
+      redirectScheme:
+        scheme: https
+        permanent: true
+
     # ── Rate Limiting (API protection) ───────
     # Adjust burst/average to suit your traffic.
     api-ratelimit:
