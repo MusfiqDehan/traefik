@@ -139,9 +139,64 @@ labels:
 
 The reusable middlewares defined in [dynamic/middlewares.yml](dynamic/middlewares.yml) are:
 
-- `security-headers@file`
+- `security-headers@file` — HTTPS API/browser traffic
+- `adms-http-headers@file` — plain-HTTP ADMS device traffic (no HSTS, `X-Forwarded-Proto: http`)
 - `compress@file`
 - `api-ratelimit@file`
+- `ws-headers@file`
+- `redirect-to-https@file`
+
+## ADMS device routing (HTTP-only)
+
+Biometric devices (ZKTeco iClock) poll over **plain HTTP on port 80**. Browsers and API clients use **HTTPS on port 443**.
+
+```
+Device → http://{host}/iclock/cdata?SN=...  → Traefik :80 (backend-adms router)
+       → Daphne :8021 → django-tenants → IclockCdataAPIView
+
+Browser → https://{host}/api/v1/...         → Traefik :443 (backend-api router, rate limited)
+```
+
+### Router split (backend docker-compose.prod.yml labels)
+
+| Router | Entrypoint | Paths | Rate limit |
+|--------|------------|-------|------------|
+| `backend-api` | websecure (443) | `/api`, `/admin`, `/media`, `/static` | Yes |
+| `backend-ws` | websecure (443) | `/ws` | No |
+| `backend-adms` | **web (80)** | `/iclock`, `/cdata`, `/getrequest`, `/devicecmd` | No |
+| `backend-custom-*` | same pattern | custom tenant domains | same |
+
+HTTPS ADMS paths are **not routed** — reconfigure devices to use `http://` URLs.
+
+### Device URL format
+
+Configure device firmware or `AccessDeviceEndpoint.base_url`:
+
+```
+http://{tenant}.fitssort.com/iclock
+http://{custom-domain}/iclock
+http://fitssort.com/iclock
+```
+
+Supported endpoints (with or without trailing slash):
+
+- `/iclock/cdata` or `/cdata` — heartbeat + attendance push
+- `/iclock/getrequest` or `/getrequest` — command poll
+- `/iclock/devicecmd` or `/devicecmd` — command ack
+
+### Smoke test
+
+```bash
+# Must succeed (HTTP)
+curl -v "http://tenant.fitssort.com/iclock/cdata?SN=YOUR_SN"
+
+# Must NOT reach ADMS handlers after migration (HTTPS)
+curl -v "https://tenant.fitssort.com/iclock/cdata?SN=YOUR_SN"
+```
+
+### Cloudflare note
+
+If Cloudflare proxies your domain, ensure port 80 is allowed for ADMS paths (DNS-only / grey cloud for device hostnames, or a Page Rule allowing HTTP on `/iclock/*`).
 
 ### Security Headers
 
@@ -197,4 +252,4 @@ The `letsencrypt` ACME resolver in [traefik.yml](traefik.yml) is attached to the
 
 - The Traefik dashboard is disabled in production via `api.dashboard: false`
 - Docker socket access is mounted read-only
-- `web` redirects permanently to `websecure`
+- `web` redirects browser/frontend traffic to `websecure`; ADMS device paths on port 80 are excluded from redirect
