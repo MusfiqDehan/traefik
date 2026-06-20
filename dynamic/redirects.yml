@@ -1,0 +1,41 @@
+# ─────────────────────────────────────────────
+# HTTP → HTTPS redirects for API/browser paths
+#
+# After the global web entrypoint redirect was removed (to keep ADMS devices
+# on plain HTTP), /api and related paths on port 80 had no matching router
+# and returned 404. These routers redirect them to HTTPS while ADMS device
+# paths (/iclock, /cdata, …) stay on HTTP via backend-adms@docker.
+# ─────────────────────────────────────────────
+
+http:
+  routers:
+    platform-api-http-redirect:
+      rule: >-
+        (Host(`fitssort.com`) || HostRegexp(`^[a-z0-9][a-z0-9-]*\.fitssort\.com$`))
+        && (PathPrefix(`/api`) || PathPrefix(`/admin`) || PathPrefix(`/media`)
+        || PathPrefix(`/static`) || PathPrefix(`/ws`))
+      entryPoints:
+        - web
+      middlewares:
+        - redirect-to-https@file
+      priority: 90
+      service: redirect-noop@file
+
+    custom-api-http-redirect:
+      rule: >-
+        HostRegexp(`^.+$`) && !Host(`fitssort.com`)
+        && !HostRegexp(`^[a-z0-9][a-z0-9-]*\.fitssort\.com$`)
+        && (PathPrefix(`/api`) || PathPrefix(`/admin`) || PathPrefix(`/media`)
+        || PathPrefix(`/static`) || PathPrefix(`/ws`))
+      entryPoints:
+        - web
+      middlewares:
+        - redirect-to-https@file
+      priority: 90
+      service: redirect-noop@file
+
+  services:
+    redirect-noop:
+      loadBalancer:
+        servers:
+          - url: "http://127.0.0.1:65535"

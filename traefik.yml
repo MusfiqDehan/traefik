@@ -102,6 +102,9 @@ providers:
   docker:
     endpoint: "unix:///var/run/docker.sock"
     exposedByDefault: false
+    # Keep routers registered when all backends are down (returns 503/504
+    # instead of a misleading 404 when the API container is restarting).
+    allowEmptyServices: true
     # Only route containers on this network
     network: traefik_proxy
 
