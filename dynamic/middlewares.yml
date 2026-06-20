@@ -23,6 +23,17 @@ http:
         stsIncludeSubdomains: true
         forceSTSHeader: true
 
+    # ── ADMS device HTTP headers ─────────────
+    # Plain-HTTP biometric devices: do NOT force HTTPS proto or HSTS.
+    adms-http-headers:
+      headers:
+        customRequestHeaders:
+          X-Forwarded-Proto: "http"
+        customResponseHeaders:
+          X-Content-Type-Options: "nosniff"
+          X-Frame-Options: "SAMEORIGIN"
+          Referrer-Policy: "strict-origin-when-cross-origin"
+
     # ── Compression ──────────────────────────
     compress:
       compress: {}
