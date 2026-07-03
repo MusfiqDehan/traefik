@@ -8,7 +8,7 @@
       
       
       
-        <link rel="canonical" href="https://yourusername.github.io/traefik/sentry-self-hosted/">
+        <link rel="canonical" href="https://traefik-proxy-setup.musfiqdehan.workers.dev/sentry-self-hosted/">
       
       
         <link rel="prev" href="../sentry-cloud/">
@@ -21,7 +21,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="zensical-0.0.46">
     
     
       
@@ -29,7 +29,10 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+      
+      <link rel="stylesheet" href="../assets/stylesheets/modern/main.19d3147f.min.css">
       
       
 
@@ -43,12 +46,12 @@
         
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
-        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,500,500i,700,700i%7CJetBrains+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
       
     
     
-    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("..",location),__md_scope.pathname.endsWith("/")||(__md_scope=new URL(__md_scope.pathname+"/",location)),__md_hash=e=>[...e].reduce(((e,t)=>(e<<5)-e+t.charCodeAt(0)),0),__md_get=(e,t=localStorage,_=__md_scope)=>JSON.parse(t.getItem(_.pathname+"."+e)),__md_set=(e,t,_=localStorage,a=__md_scope)=>{try{_.setItem(a.pathname+"."+e,JSON.stringify(t))}catch(e){}},document.documentElement.setAttribute("data-platform",navigator.platform)</script>
     
       
 
@@ -62,7 +65,7 @@
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
-    <label class="md-overlay" for="__drawer"></label>
+    <label class="md-overlay" for="__drawer" aria-label="Navigation"></label>
     <div data-md-component="skip">
       
         
@@ -82,15 +85,15 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href=".." title="Traefik Infrastructure Docs" class="md-header__button md-logo" aria-label="Traefik Infrastructure Docs" data-md-component="logo">
+    <a href="./.." title="Traefik Infrastructure Docs" class="md-header__button md-logo" aria-label="Traefik Infrastructure Docs" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-book-open" viewBox="0 0 24 24"><path d="M12 7v14M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>
 
     </a>
-    <label class="md-header__button md-icon" for="__drawer">
+    <label class="md-header__button md-icon" for="__drawer" aria-label="Navigation">
       
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-menu" viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h16"/></svg>
     </label>
     <div class="md-header__title" data-md-component="header-title">
       <div class="md-header__ellipsis">
@@ -116,45 +119,20 @@
     
       
       
-        <label class="md-header__button md-icon" for="__search">
+        <label class="md-header__button md-icon" for="__search" aria-label="Search">
           
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-search" viewBox="0 0 24 24"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
         </label>
-        <div class="md-search" data-md-component="search" role="dialog">
-  <label class="md-search__overlay" for="__search"></label>
-  <div class="md-search__inner" role="search">
-    <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
-      <label class="md-search__icon md-icon" for="__search">
-        
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
-        
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
-      </label>
-      <nav class="md-search__options" aria-label="Search">
-        
-        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
-          
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-        </button>
-      </nav>
-      
-    </form>
-    <div class="md-search__output">
-      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
-        <div class="md-search-result" data-md-component="search-result">
-          <div class="md-search-result__meta">
-            Initializing search
-          </div>
-          <ol class="md-search-result__list" role="presentation"></ol>
-        </div>
-      </div>
-    </div>
-  </div>
+        <div class="md-search" data-md-component="search" role="dialog" aria-label="Search">
+  <button type="button" class="md-search__button">
+    Search
+  </button>
 </div>
       
     
-    
+    <div class="md-header__source">
+      
+    </div>
   </nav>
   
 </header>
@@ -180,10 +158,10 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="Traefik Infrastructure Docs" class="md-nav__button md-logo" aria-label="Traefik Infrastructure Docs" data-md-component="logo">
+    <a href="./.." title="Traefik Infrastructure Docs" class="md-nav__button md-logo" aria-label="Traefik Infrastructure Docs" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-book-open" viewBox="0 0 24 24"><path d="M12 7v14M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>
 
     </a>
     Traefik Infrastructure Docs
@@ -198,15 +176,14 @@
   
   
     <li class="md-nav__item">
-      <a href=".." class="md-nav__link">
+      <a href="./.." class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Home
-  
+  Home
 
     
   </span>
@@ -232,8 +209,7 @@
   <span class="md-ellipsis">
     
   
-    Getting Started
-  
+  Getting Started
 
     
   </span>
@@ -259,8 +235,7 @@
   <span class="md-ellipsis">
     
   
-    DNS & Domains
-  
+  DNS & Domains
 
     
   </span>
@@ -286,8 +261,7 @@
   <span class="md-ellipsis">
     
   
-    TLS & Certificates
-  
+  TLS & Certificates
 
     
   </span>
@@ -313,8 +287,7 @@
   <span class="md-ellipsis">
     
   
-    Monitoring
-  
+  Monitoring
 
     
   </span>
@@ -340,8 +313,7 @@
   <span class="md-ellipsis">
     
   
-    Sentry Cloud
-  
+  Sentry Cloud
 
     
   </span>
@@ -363,7 +335,7 @@
   
     <li class="md-nav__item md-nav__item--active">
       
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
       
       
         
@@ -376,8 +348,7 @@
   <span class="md-ellipsis">
     
   
-    Self-Hosted Sentry
-  
+  Self-Hosted Sentry
 
     
   </span>
@@ -387,15 +358,14 @@
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <a href="./" class="md-nav__link md-nav__link--active">
+      <a href="././" class="md-nav__link md-nav__link--active">
         
   
   
   <span class="md-ellipsis">
     
   
-    Self-Hosted Sentry
-  
+  Self-Hosted Sentry
 
     
   </span>
@@ -406,7 +376,8 @@
       
         
 
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
   
   
   
@@ -415,16 +386,16 @@
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
-      Table of contents
+      On this page
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
   <a href="#install" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Install
-      
+      </span>
     </span>
   </a>
   
@@ -433,9 +404,9 @@
         <li class="md-nav__item">
   <a href="#expose-via-traefik" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Expose via Traefik
-      
+      </span>
     </span>
   </a>
   
@@ -445,9 +416,9 @@
           <li class="md-nav__item">
   <a href="#1-set-url-prefix" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         1. Set URL prefix
-      
+      </span>
     </span>
   </a>
   
@@ -456,9 +427,9 @@
           <li class="md-nav__item">
   <a href="#2-attach-web-service-to-traefik_proxy" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         2. Attach web service to traefik_proxy
-      
+      </span>
     </span>
   </a>
   
@@ -467,9 +438,9 @@
           <li class="md-nav__item">
   <a href="#3-create-admin-user" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         3. Create admin user
-      
+      </span>
     </span>
   </a>
   
@@ -483,9 +454,9 @@
         <li class="md-nav__item">
   <a href="#application-sdk-wiring" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Application SDK wiring
-      
+      </span>
     </span>
   </a>
   
@@ -494,9 +465,9 @@
         <li class="md-nav__item">
   <a href="#startup-order-with-traefik-monitoring" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Startup order (with Traefik + monitoring)
-      
+      </span>
     </span>
   </a>
   
@@ -505,9 +476,9 @@
         <li class="md-nav__item">
   <a href="#upgrades" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Upgrades
-      
+      </span>
     </span>
   </a>
   
@@ -516,9 +487,9 @@
         <li class="md-nav__item">
   <a href="#troubleshooting" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Troubleshooting
-      
+      </span>
     </span>
   </a>
   
@@ -546,8 +517,7 @@
   <span class="md-ellipsis">
     
   
-    Routing & ADMS
-  
+  Routing & ADMS
 
     
   </span>
@@ -573,8 +543,7 @@
   <span class="md-ellipsis">
     
   
-    Troubleshooting
-  
+  Troubleshooting
 
     
   </span>
@@ -596,10 +565,24 @@
               
               <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
                 <div class="md-sidebar__scrollwrap">
+                  
+                    
+                    
+                    
+                      
+                    
+                    
+                      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+                      <div class="md-sidebar-button__wrapper">
+                        <label class="md-sidebar-button" for="__toc"></label>
+                      </div>
+                    
+                  
                   <div class="md-sidebar__inner">
                     
 
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
   
   
   
@@ -608,16 +591,16 @@
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
-      Table of contents
+      On this page
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
   <a href="#install" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Install
-      
+      </span>
     </span>
   </a>
   
@@ -626,9 +609,9 @@
         <li class="md-nav__item">
   <a href="#expose-via-traefik" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Expose via Traefik
-      
+      </span>
     </span>
   </a>
   
@@ -638,9 +621,9 @@
           <li class="md-nav__item">
   <a href="#1-set-url-prefix" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         1. Set URL prefix
-      
+      </span>
     </span>
   </a>
   
@@ -649,9 +632,9 @@
           <li class="md-nav__item">
   <a href="#2-attach-web-service-to-traefik_proxy" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         2. Attach web service to traefik_proxy
-      
+      </span>
     </span>
   </a>
   
@@ -660,9 +643,9 @@
           <li class="md-nav__item">
   <a href="#3-create-admin-user" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         3. Create admin user
-      
+      </span>
     </span>
   </a>
   
@@ -676,9 +659,9 @@
         <li class="md-nav__item">
   <a href="#application-sdk-wiring" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Application SDK wiring
-      
+      </span>
     </span>
   </a>
   
@@ -687,9 +670,9 @@
         <li class="md-nav__item">
   <a href="#startup-order-with-traefik-monitoring" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Startup order (with Traefik + monitoring)
-      
+      </span>
     </span>
   </a>
   
@@ -698,9 +681,9 @@
         <li class="md-nav__item">
   <a href="#upgrades" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Upgrades
-      
+      </span>
     </span>
   </a>
   
@@ -709,9 +692,9 @@
         <li class="md-nav__item">
   <a href="#troubleshooting" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Troubleshooting
-      
+      </span>
     </span>
   </a>
   
@@ -732,56 +715,54 @@
                 
                   
 
-
-
-<h1 id="self-hosted-sentry">Self-Hosted Sentry</h1>
+<h1 id="self-hosted-sentry">Self-Hosted Sentry<a class="headerlink" href="#self-hosted-sentry" title="Permanent link">&para;</a></h1>
 <p>Run Sentry on your own infrastructure using the <a href="https://github.com/getsentry/self-hosted">official self-hosted installer</a>.</p>
 <blockquote>
 <p><strong>Resource requirements:</strong> 16 GB RAM minimum for Sentry alone; <strong>24 GB+</strong> recommended if Prometheus/Grafana/Loki run on the same host. On a 12 GB VPS, use <a href="../sentry-cloud/">Sentry Cloud</a> instead.</p>
 </blockquote>
 <p>Sentry is <strong>not</strong> a single Docker image — the installer deploys Postgres, Redis, Kafka, ClickHouse, Snuba, Relay, web, workers, cron, and more.</p>
-<h2 id="install">Install</h2>
-<pre><code class="language-bash"># Sibling directory to this repo, e.g. ~/DevOps/sentry-self-hosted
-git clone https://github.com/getsentry/self-hosted.git
-cd self-hosted
-./install.sh
-</code></pre>
+<h2 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Sibling directory to this repo, e.g. ~/DevOps/sentry-self-hosted</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/getsentry/self-hosted.git
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">cd</span><span class="w"> </span>self-hosted
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>./install.sh
+</span></code></pre></div>
 <p>Follow the interactive installer to create an admin user and generate <code>docker-compose.yml</code>.</p>
-<p>Keep Sentry in its <strong>own directory</strong> — do not merge into <a href="../docker-compose.monitoring.yml">docker-compose.monitoring.yml</a>. Upgrades use Sentry's <code>./install.sh</code>.</p>
-<h2 id="expose-via-traefik">Expose via Traefik</h2>
+<p>Keep Sentry in its <strong>own directory</strong> — do not merge into <a href="../../docker-compose.monitoring.yml">docker-compose.monitoring.yml</a>. Upgrades use Sentry's <code>./install.sh</code>.</p>
+<h2 id="expose-via-traefik">Expose via Traefik<a class="headerlink" href="#expose-via-traefik" title="Permanent link">&para;</a></h2>
 <p>After installation, configure the public URL and attach to the existing proxy network.</p>
-<h3 id="1-set-url-prefix">1. Set URL prefix</h3>
+<h3 id="1-set-url-prefix">1. Set URL prefix<a class="headerlink" href="#1-set-url-prefix" title="Permanent link">&para;</a></h3>
 <p>Edit <code>sentry/config.yml</code>:</p>
-<pre><code class="language-yaml">system.url-prefix: 'https://sentry.musfiqdehan.com'
-</code></pre>
-<h3 id="2-attach-web-service-to-traefik_proxy">2. Attach web service to traefik_proxy</h3>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">system.url-prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;https://sentry.musfiqdehan.com&#39;</span>
+</span></code></pre></div>
+<h3 id="2-attach-web-service-to-traefik_proxy">2. Attach web service to traefik_proxy<a class="headerlink" href="#2-attach-web-service-to-traefik_proxy" title="Permanent link">&para;</a></h3>
 <p>In Sentry's <code>docker-compose.yml</code>, on the <code>web</code> service:</p>
-<pre><code class="language-yaml">services:
-  web:
-    networks:
-      - default
-      - traefik_proxy
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.sentry.rule=Host(`sentry.musfiqdehan.com`)
-      - traefik.http.routers.sentry.entrypoints=websecure
-      - traefik.http.routers.sentry.tls=true
-      - traefik.http.services.sentry.loadbalancer.server.port=9000
-
-networks:
-  traefik_proxy:
-    external: true
-</code></pre>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">services</span><span class="p">:</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">web</span><span class="p">:</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nt">networks</span><span class="p">:</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">traefik_proxy</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="nt">labels</span><span class="p">:</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">traefik.enable=true</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">traefik.http.routers.sentry.rule=Host(`sentry.musfiqdehan.com`)</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">traefik.http.routers.sentry.entrypoints=websecure</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">traefik.http.routers.sentry.tls=true</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">traefik.http.services.sentry.loadbalancer.server.port=9000</span>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="nt">networks</span><span class="p">:</span>
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">  </span><span class="nt">traefik_proxy</span><span class="p">:</span>
+</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">    </span><span class="nt">external</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span></code></pre></div>
 <p>Ensure Traefik is running and <code>sentry.musfiqdehan.com</code> DNS points to the server.</p>
-<h3 id="3-create-admin-user">3. Create admin user</h3>
+<h3 id="3-create-admin-user">3. Create admin user<a class="headerlink" href="#3-create-admin-user" title="Permanent link">&para;</a></h3>
 <p>During <code>./install.sh</code> or afterward:</p>
-<pre><code class="language-bash">docker compose exec web sentry createuser
-</code></pre>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>web<span class="w"> </span>sentry<span class="w"> </span>createuser
+</span></code></pre></div>
 <p>Disable public signup in Sentry admin after setup.</p>
-<h2 id="application-sdk-wiring">Application SDK wiring</h2>
+<h2 id="application-sdk-wiring">Application SDK wiring<a class="headerlink" href="#application-sdk-wiring" title="Permanent link">&para;</a></h2>
 <p>Create one Sentry project per app in the self-hosted UI. DSN format:</p>
-<pre><code>https://&lt;key&gt;@sentry.musfiqdehan.com/&lt;project-id&gt;
-</code></pre>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>https://&lt;key&gt;@sentry.musfiqdehan.com/&lt;project-id&gt;
+</span></code></pre></div>
 <table>
 <thead>
 <tr>
@@ -808,19 +789,19 @@ networks:
 </tr>
 </tbody>
 </table>
-<h2 id="startup-order-with-traefik-monitoring">Startup order (with Traefik + monitoring)</h2>
-<pre><code class="language-bash"># 1. Traefik
-docker compose --env-file .env -f docker-compose.traefik.yml up -d
-
-# 2. Monitoring
-docker compose --env-file .env -f docker-compose.monitoring.yml up -d
-
-# 3. Sentry (from sentry-self-hosted directory)
-docker compose up -d
-</code></pre>
-<h2 id="upgrades">Upgrades</h2>
+<h2 id="startup-order-with-traefik-monitoring">Startup order (with Traefik + monitoring)<a class="headerlink" href="#startup-order-with-traefik-monitoring" title="Permanent link">&para;</a></h2>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># 1. Traefik</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>docker<span class="w"> </span>compose<span class="w"> </span>--env-file<span class="w"> </span>.env<span class="w"> </span>-f<span class="w"> </span>docker-compose.traefik.yml<span class="w"> </span>up<span class="w"> </span>-d
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="c1"># 2. Monitoring</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>docker<span class="w"> </span>compose<span class="w"> </span>--env-file<span class="w"> </span>.env<span class="w"> </span>-f<span class="w"> </span>docker-compose.monitoring.yml<span class="w"> </span>up<span class="w"> </span>-d
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="c1"># 3. Sentry (from sentry-self-hosted directory)</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+</span></code></pre></div>
+<h2 id="upgrades">Upgrades<a class="headerlink" href="#upgrades" title="Permanent link">&para;</a></h2>
 <p>Follow the <a href="https://develop.sentry.dev/self-hosted/releases/">official upgrade guide</a>. Always run <code>./install.sh</code> from the self-hosted repo after pulling a new release tag.</p>
-<h2 id="troubleshooting">Troubleshooting</h2>
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -859,6 +840,8 @@ docker compose up -d
 
 
 
+
+
                 
               </article>
             </div>
@@ -877,8 +860,8 @@ docker compose up -d
   
   
     Made with
-    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
-      Material for MkDocs
+    <a href="https://zensical.org/" target="_blank" rel="noopener">
+      Zensical
     </a>
   
 </div>
@@ -896,10 +879,10 @@ docker compose up -d
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate":null,"base":"..","features":[],"search":"../assets/javascripts/workers/search.b6b7e04f.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
     
     
-      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../assets/javascripts/bundle.ee611ef6.min.js"></script>
       
     
   </body>

@@ -8,7 +8,7 @@
       
       
       
-        <link rel="canonical" href="https://yourusername.github.io/traefik/sentry-cloud/">
+        <link rel="canonical" href="https://traefik-proxy-setup.musfiqdehan.workers.dev/sentry-cloud/">
       
       
         <link rel="prev" href="../monitoring/">
@@ -21,7 +21,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="zensical-0.0.46">
     
     
       
@@ -29,7 +29,10 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+      
+      <link rel="stylesheet" href="../assets/stylesheets/modern/main.19d3147f.min.css">
       
       
 
@@ -43,12 +46,12 @@
         
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
-        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,500,500i,700,700i%7CJetBrains+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
       
     
     
-    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("..",location),__md_scope.pathname.endsWith("/")||(__md_scope=new URL(__md_scope.pathname+"/",location)),__md_hash=e=>[...e].reduce(((e,t)=>(e<<5)-e+t.charCodeAt(0)),0),__md_get=(e,t=localStorage,_=__md_scope)=>JSON.parse(t.getItem(_.pathname+"."+e)),__md_set=(e,t,_=localStorage,a=__md_scope)=>{try{_.setItem(a.pathname+"."+e,JSON.stringify(t))}catch(e){}},document.documentElement.setAttribute("data-platform",navigator.platform)</script>
     
       
 
@@ -62,7 +65,7 @@
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
-    <label class="md-overlay" for="__drawer"></label>
+    <label class="md-overlay" for="__drawer" aria-label="Navigation"></label>
     <div data-md-component="skip">
       
         
@@ -82,15 +85,15 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href=".." title="Traefik Infrastructure Docs" class="md-header__button md-logo" aria-label="Traefik Infrastructure Docs" data-md-component="logo">
+    <a href="./.." title="Traefik Infrastructure Docs" class="md-header__button md-logo" aria-label="Traefik Infrastructure Docs" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-book-open" viewBox="0 0 24 24"><path d="M12 7v14M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>
 
     </a>
-    <label class="md-header__button md-icon" for="__drawer">
+    <label class="md-header__button md-icon" for="__drawer" aria-label="Navigation">
       
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-menu" viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h16"/></svg>
     </label>
     <div class="md-header__title" data-md-component="header-title">
       <div class="md-header__ellipsis">
@@ -116,45 +119,20 @@
     
       
       
-        <label class="md-header__button md-icon" for="__search">
+        <label class="md-header__button md-icon" for="__search" aria-label="Search">
           
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-search" viewBox="0 0 24 24"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
         </label>
-        <div class="md-search" data-md-component="search" role="dialog">
-  <label class="md-search__overlay" for="__search"></label>
-  <div class="md-search__inner" role="search">
-    <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
-      <label class="md-search__icon md-icon" for="__search">
-        
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
-        
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
-      </label>
-      <nav class="md-search__options" aria-label="Search">
-        
-        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
-          
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-        </button>
-      </nav>
-      
-    </form>
-    <div class="md-search__output">
-      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
-        <div class="md-search-result" data-md-component="search-result">
-          <div class="md-search-result__meta">
-            Initializing search
-          </div>
-          <ol class="md-search-result__list" role="presentation"></ol>
-        </div>
-      </div>
-    </div>
-  </div>
+        <div class="md-search" data-md-component="search" role="dialog" aria-label="Search">
+  <button type="button" class="md-search__button">
+    Search
+  </button>
 </div>
       
     
-    
+    <div class="md-header__source">
+      
+    </div>
   </nav>
   
 </header>
@@ -180,10 +158,10 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="Traefik Infrastructure Docs" class="md-nav__button md-logo" aria-label="Traefik Infrastructure Docs" data-md-component="logo">
+    <a href="./.." title="Traefik Infrastructure Docs" class="md-nav__button md-logo" aria-label="Traefik Infrastructure Docs" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-book-open" viewBox="0 0 24 24"><path d="M12 7v14M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>
 
     </a>
     Traefik Infrastructure Docs
@@ -198,15 +176,14 @@
   
   
     <li class="md-nav__item">
-      <a href=".." class="md-nav__link">
+      <a href="./.." class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Home
-  
+  Home
 
     
   </span>
@@ -232,8 +209,7 @@
   <span class="md-ellipsis">
     
   
-    Getting Started
-  
+  Getting Started
 
     
   </span>
@@ -259,8 +235,7 @@
   <span class="md-ellipsis">
     
   
-    DNS & Domains
-  
+  DNS & Domains
 
     
   </span>
@@ -286,8 +261,7 @@
   <span class="md-ellipsis">
     
   
-    TLS & Certificates
-  
+  TLS & Certificates
 
     
   </span>
@@ -313,8 +287,7 @@
   <span class="md-ellipsis">
     
   
-    Monitoring
-  
+  Monitoring
 
     
   </span>
@@ -336,7 +309,7 @@
   
     <li class="md-nav__item md-nav__item--active">
       
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
       
       
         
@@ -349,8 +322,7 @@
   <span class="md-ellipsis">
     
   
-    Sentry Cloud
-  
+  Sentry Cloud
 
     
   </span>
@@ -360,15 +332,14 @@
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <a href="./" class="md-nav__link md-nav__link--active">
+      <a href="././" class="md-nav__link md-nav__link--active">
         
   
   
   <span class="md-ellipsis">
     
   
-    Sentry Cloud
-  
+  Sentry Cloud
 
     
   </span>
@@ -379,7 +350,8 @@
       
         
 
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
   
   
   
@@ -388,16 +360,16 @@
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
-      Table of contents
+      On this page
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
   <a href="#setup" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Setup
-      
+      </span>
     </span>
   </a>
   
@@ -406,9 +378,9 @@
         <li class="md-nav__item">
   <a href="#sdk-wiring" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         SDK wiring
-      
+      </span>
     </span>
   </a>
   
@@ -418,9 +390,9 @@
           <li class="md-nav__item">
   <a href="#django-example" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Django example
-      
+      </span>
     </span>
   </a>
   
@@ -434,9 +406,9 @@
         <li class="md-nav__item">
   <a href="#when-to-use-self-hosted-instead" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         When to use self-hosted instead
-      
+      </span>
     </span>
   </a>
   
@@ -464,8 +436,7 @@
   <span class="md-ellipsis">
     
   
-    Self-Hosted Sentry
-  
+  Self-Hosted Sentry
 
     
   </span>
@@ -491,8 +462,7 @@
   <span class="md-ellipsis">
     
   
-    Routing & ADMS
-  
+  Routing & ADMS
 
     
   </span>
@@ -518,8 +488,7 @@
   <span class="md-ellipsis">
     
   
-    Troubleshooting
-  
+  Troubleshooting
 
     
   </span>
@@ -541,10 +510,24 @@
               
               <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
                 <div class="md-sidebar__scrollwrap">
+                  
+                    
+                    
+                    
+                      
+                    
+                    
+                      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+                      <div class="md-sidebar-button__wrapper">
+                        <label class="md-sidebar-button" for="__toc"></label>
+                      </div>
+                    
+                  
                   <div class="md-sidebar__inner">
                     
 
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
   
   
   
@@ -553,16 +536,16 @@
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
-      Table of contents
+      On this page
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
   <a href="#setup" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Setup
-      
+      </span>
     </span>
   </a>
   
@@ -571,9 +554,9 @@
         <li class="md-nav__item">
   <a href="#sdk-wiring" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         SDK wiring
-      
+      </span>
     </span>
   </a>
   
@@ -583,9 +566,9 @@
           <li class="md-nav__item">
   <a href="#django-example" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Django example
-      
+      </span>
     </span>
   </a>
   
@@ -599,9 +582,9 @@
         <li class="md-nav__item">
   <a href="#when-to-use-self-hosted-instead" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         When to use self-hosted instead
-      
+      </span>
     </span>
   </a>
   
@@ -622,12 +605,10 @@
                 
                   
 
-
-
-<h1 id="sentry-cloud">Sentry Cloud</h1>
+<h1 id="sentry-cloud">Sentry Cloud<a class="headerlink" href="#sentry-cloud" title="Permanent link">&para;</a></h1>
 <p><strong>Recommended</strong> for servers with limited RAM (e.g. 12 GB). No containers run on this host for Sentry.</p>
 <p>Sentry captures <strong>application errors</strong> (exceptions, stack traces, releases). It does <strong>not</strong> replace Loki for raw container logs — use <a href="../monitoring/">Monitoring</a> for log aggregation.</p>
-<h2 id="setup">Setup</h2>
+<h2 id="setup">Setup<a class="headerlink" href="#setup" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Create an account at <a href="https://sentry.io/signup/">sentry.io</a></li>
 <li>Create an organization</li>
@@ -635,7 +616,7 @@
 <li>Copy each project's <strong>DSN</strong> from <strong>Settings → Projects → [project] → Client Keys (DSN)</strong></li>
 </ol>
 <p>No Traefik routes or DNS records are required — apps send events outbound to Sentry's ingest endpoints.</p>
-<h2 id="sdk-wiring">SDK wiring</h2>
+<h2 id="sdk-wiring">SDK wiring<a class="headerlink" href="#sdk-wiring" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -663,20 +644,22 @@
 </tbody>
 </table>
 <p>DSN format:</p>
-<pre><code>https://&lt;key&gt;@o&lt;org-id&gt;.ingest.&lt;region&gt;.sentry.io/&lt;project-id&gt;
-</code></pre>
-<h3 id="django-example">Django example</h3>
-<pre><code class="language-python">import os
-import sentry_sdk
-
-sentry_sdk.init(
-    dsn=os.environ[&quot;SENTRY_DSN&quot;],
-    environment=os.environ.get(&quot;SENTRY_ENVIRONMENT&quot;, &quot;production&quot;),
-    traces_sample_rate=0.1,
-)
-</code></pre>
-<h2 id="when-to-use-self-hosted-instead">When to use self-hosted instead</h2>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>https://&lt;key&gt;@o&lt;org-id&gt;.ingest.&lt;region&gt;.sentry.io/&lt;project-id&gt;
+</span></code></pre></div>
+<h3 id="django-example">Django example<a class="headerlink" href="#django-example" title="Permanent link">&para;</a></h3>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">sentry_sdk</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">sentry_sdk</span><span class="o">.</span><span class="n">init</span><span class="p">(</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="n">dsn</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SENTRY_DSN&quot;</span><span class="p">],</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="n">environment</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SENTRY_ENVIRONMENT&quot;</span><span class="p">,</span> <span class="s2">&quot;production&quot;</span><span class="p">),</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="n">traces_sample_rate</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="p">)</span>
+</span></code></pre></div>
+<h2 id="when-to-use-self-hosted-instead">When to use self-hosted instead<a class="headerlink" href="#when-to-use-self-hosted-instead" title="Permanent link">&para;</a></h2>
 <p>See <a href="../sentry-self-hosted/">Self-Hosted Sentry</a> if you have <strong>16 GB+ RAM</strong> (24 GB+ with monitoring) and need data residency or air-gapped deployment.</p>
+
+
 
 
 
@@ -707,8 +690,8 @@ sentry_sdk.init(
   
   
     Made with
-    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
-      Material for MkDocs
+    <a href="https://zensical.org/" target="_blank" rel="noopener">
+      Zensical
     </a>
   
 </div>
@@ -726,10 +709,10 @@ sentry_sdk.init(
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate":null,"base":"..","features":[],"search":"../assets/javascripts/workers/search.b6b7e04f.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
     
     
-      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../assets/javascripts/bundle.ee611ef6.min.js"></script>
       
     
   </body>
