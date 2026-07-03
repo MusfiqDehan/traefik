@@ -63,3 +63,9 @@ http:
         customRequestHeaders:
           Connection: "Upgrade"
           Upgrade: "websocket"
+
+    # ── Monitoring UI (Grafana) ──────────────
+    # Requires dynamic/.htpasswd — see README.
+    monitoring-basic-auth:
+      basicAuth:
+        usersFile: /etc/traefik/dynamic/.htpasswd
