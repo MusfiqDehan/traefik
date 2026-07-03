@@ -1,7 +1,14 @@
-# TLS Configuration — musfiqdehan.com + *.musfiqdehan.com
+# TLS Configuration
 #
-# Primary: Cloudflare Origin Certificate (certs/origin.pem + origin.key).
+# Platform domains:
+#   musfiqdehan.com (apex only)
+#   mrdfit.uk, mrderp.uk, mrdhrms.uk, mrdlms.uk (+ wildcard tenant subdomains)
+#
+# Primary: Cloudflare Origin Certificate(s) in certs/.
 # Fallback: Let's Encrypt DNS-01 via Cloudflare API (traefik.yml letsencrypt resolver).
+#
+# Default cert below covers musfiqdehan.com. Add additional certificate blocks
+# (origin-mrdfit.pem, etc.) when origin certs exist for each UK zone.
 
 tls:
   stores:
