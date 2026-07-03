@@ -5,6 +5,17 @@ site_dir: site
 
 theme:
   name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      toggle:
+        icon: lucide/sun
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      toggle:
+        icon: lucide/moon
+        name: Switch to light mode
 
 nav:
   - Home: README.md
