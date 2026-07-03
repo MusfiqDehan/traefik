@@ -9,7 +9,7 @@
 #
 # Cert placement:
 #   Copy Cloudflare origin cert files into ./shared/traefik/certs/
-#     origin.pem  — public cert (wildcard *.fitssort.com)
+#     origin.pem  — public cert (wildcard *.musfiqdehan.com)
 #     origin.key  — private key
 #
 # Let's Encrypt fallback:
