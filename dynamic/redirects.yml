@@ -11,7 +11,7 @@ http:
   routers:
     platform-api-http-redirect:
       rule: >-
-        (Host(`fitssort.com`) || HostRegexp(`^[a-z0-9][a-z0-9-]*\.fitssort\.com$`))
+        (Host(`musfiqdehan.com`) || HostRegexp(`^[a-z0-9][a-z0-9-]*\.musfiqdehan\.com$`))
         && (PathPrefix(`/api`) || PathPrefix(`/admin`) || PathPrefix(`/media`)
         || PathPrefix(`/static`) || PathPrefix(`/ws`))
       entryPoints:
@@ -23,8 +23,8 @@ http:
 
     custom-api-http-redirect:
       rule: >-
-        HostRegexp(`^.+$`) && !Host(`fitssort.com`)
-        && !HostRegexp(`^[a-z0-9][a-z0-9-]*\.fitssort\.com$`)
+        HostRegexp(`^.+$`) && !Host(`musfiqdehan.com`)
+        && !HostRegexp(`^[a-z0-9][a-z0-9-]*\.musfiqdehan\.com$`)
         && (PathPrefix(`/api`) || PathPrefix(`/admin`) || PathPrefix(`/media`)
         || PathPrefix(`/static`) || PathPrefix(`/ws`))
       entryPoints:
