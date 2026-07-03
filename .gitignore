@@ -1,3 +1,4 @@
 origin.pem
 origin.key
 .env
+dynamic/.htpasswd
