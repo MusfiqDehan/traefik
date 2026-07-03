@@ -13,7 +13,7 @@
 #     origin.key  — private key
 #
 # Let's Encrypt fallback:
-#   Export HOSTINGER_API_TOKEN or pass --env-file shared/traefik/.env when starting Traefik.
+#   Export CF_DNS_API_TOKEN or pass --env-file shared/traefik/.env when starting Traefik.
 # ─────────────────────────────────────────────────────────────────────────────
 
 services:
@@ -27,7 +27,7 @@ services:
       - "4000:4000" # makeover-api entrypoint (NestJS + socket.io, HTTP)
     environment:
       # Required only when the Let's Encrypt DNS-01 fallback needs to issue or renew certificates.
-      - HOSTINGER_API_TOKEN=${HOSTINGER_API_TOKEN:-}
+      - CF_DNS_API_TOKEN=${CF_DNS_API_TOKEN:-}
     volumes:
       # Docker socket (read-only — label discovery only)
       - /var/run/docker.sock:/var/run/docker.sock:ro
