@@ -1,6 +1,6 @@
 # ─────────────────────────────────────────────
 # Traefik v3 — Static Configuration
-# Domain: fitssort.com
+# Domain: musfiqdehan.com
 # ─────────────────────────────────────────────
 
 global:
@@ -22,8 +22,19 @@ api:
 
 ping: {}
 
+metrics:
+  prometheus:
+    entryPoint: traefik
+    addEntryPointsLabels: true
+    addRoutersLabels: true
+    addServicesLabels: true
+
 # ── Entry Points ─────────────────────────────
 entryPoints:
+  # Internal — Prometheus metrics only (not published to host).
+  traefik:
+    address: ":8080"
+
   web:
     address: ":80"
 
