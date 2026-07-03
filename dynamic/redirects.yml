@@ -5,14 +5,21 @@
 # on plain HTTP), /api and related paths on port 80 had no matching router
 # and returned 404. These routers redirect them to HTTPS while ADMS device
 # paths (/iclock, /cdata, …) stay on HTTP via backend-adms@docker.
+#
+# Platform hosts (tenant subdomains):
+#   - musfiqdehan.com          (apex only — no *.musfiqdehan.com)
+#   - mrdfit.uk + *.mrdfit.uk
+#   - mrderp.uk + *.mrderp.uk
+#   - mrdhrms.uk + *.mrdhrms.uk
+#   - mrdlms.uk + *.mrdlms.uk
 # ─────────────────────────────────────────────
 
 http:
   routers:
     platform-api-http-redirect:
       rule: >-
-        (Host(`musfiqdehan.com`) || HostRegexp(`^[a-z0-9][a-z0-9-]*\.musfiqdehan\.com$`))
-        && (PathPrefix(`/api`) || PathPrefix(`/admin`) || PathPrefix(`/media`)
+        HostRegexp(`^(musfiqdehan\.com|([a-z0-9][a-z0-9-]*\.)?(mrdfit|mrderp|mrdhrms|mrdlms)\.uk)$`)
+        && (PathPrefix(`/api`) || PathPrefix(`/ninja`) || PathPrefix(`/media`)
         || PathPrefix(`/static`) || PathPrefix(`/ws`))
       entryPoints:
         - web
@@ -23,9 +30,9 @@ http:
 
     custom-api-http-redirect:
       rule: >-
-        HostRegexp(`^.+$`) && !Host(`musfiqdehan.com`)
-        && !HostRegexp(`^[a-z0-9][a-z0-9-]*\.musfiqdehan\.com$`)
-        && (PathPrefix(`/api`) || PathPrefix(`/admin`) || PathPrefix(`/media`)
+        HostRegexp(`^.+$`)
+        && !HostRegexp(`^(musfiqdehan\.com|([a-z0-9][a-z0-9-]*\.)?(mrdfit|mrderp|mrdhrms|mrdlms)\.uk)$`)
+        && (PathPrefix(`/api`) || PathPrefix(`/ninja`) || PathPrefix(`/media`)
         || PathPrefix(`/static`) || PathPrefix(`/ws`))
       entryPoints:
         - web
