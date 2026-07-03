@@ -1,0 +1,15 @@
+site_name: Traefik Infrastructure Docs
+site_url: https://yourusername.github.io/traefik/
+docs_dir: docs
+theme:
+  name: material
+nav:
+  - Home: README.md
+  - Getting Started: getting-started.md
+  - DNS & Domains: dns-and-domains.md
+  - TLS & Certificates: tls-and-certificates.md
+  - Monitoring: monitoring.md
+  - Sentry Cloud: sentry-cloud.md
+  - Self-Hosted Sentry: sentry-self-hosted.md
+  - Routing & ADMS: routing-and-adms.md
+  - Troubleshooting: troubleshooting.md
