@@ -1,6 +1,6 @@
 # ─────────────────────────────────────────────
 # Traefik v3 — Static Configuration
-# Domain: musfiqdehan.com
+# Domain: musfiqdehan.com (apex) + mrdfit.uk, mrderp.uk, mrdhrms.uk, mrdlms.uk (wildcard tenants)
 # ─────────────────────────────────────────────
 
 global:
