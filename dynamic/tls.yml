@@ -1,22 +1,16 @@
-# ─────────────────────────────────────────────
-# TLS Configuration
-# Covers: fitssort.com + *.fitssort.com
+# TLS Configuration — fitssort.com + *.fitssort.com
 #
-# Certificates are issued automatically via Let's Encrypt ACME
-# (DNS-01 challenge with Hostinger) configured in traefik.yml.
-#
-# To use a Cloudflare origin certificate instead, place the
-# cert files in ./certs/ and uncomment the blocks below:
-#
-# tls:
-#   stores:
-#     default:
-#       defaultCertificate:
-#         certFile: /certs/origin.pem
-#         keyFile: /certs/origin.key
-#   certificates:
-#     - certFile: /certs/origin.pem
-#       keyFile: /certs/origin.key
-#       stores:
-#         - default
-# ─────────────────────────────────────────────
+# Primary: Cloudflare Origin Certificate (certs/origin.pem + origin.key).
+# Fallback: Let's Encrypt DNS-01 via Cloudflare API (traefik.yml letsencrypt resolver).
+
+tls:
+  stores:
+    default:
+      defaultCertificate:
+        certFile: /certs/origin.pem
+        keyFile: /certs/origin.key
+  certificates:
+    - certFile: /certs/origin.pem
+      keyFile: /certs/origin.key
+      stores:
+        - default
