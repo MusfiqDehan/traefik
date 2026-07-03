@@ -1,3 +1,7 @@
+---
+icon: lucide/server
+---
+
 # Self-Hosted Sentry
 
 Run Sentry on your own infrastructure using the [official self-hosted installer](https://github.com/getsentry/self-hosted).

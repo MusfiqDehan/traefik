@@ -1,3 +1,7 @@
+---
+icon: lucide/chart-line
+---
+
 # Monitoring Stack
 
 Docker-based observability: **Prometheus** (metrics), **Grafana** (dashboards), **Loki + Promtail** (container logs).

@@ -1,3 +1,7 @@
+---
+icon: lucide/globe
+---
+
 # DNS & Domains
 
 All zones are expected to be proxied through Cloudflare with **SSL/TLS mode: Full (strict)**.

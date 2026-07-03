@@ -1,3 +1,7 @@
+---
+icon: lucide/route
+---
+
 # Routing & ADMS
 
 ## How Traefik discovers services

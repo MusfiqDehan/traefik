@@ -1,3 +1,7 @@
+---
+icon: lucide/life-buoy
+---
+
 # Troubleshooting
 
 ## TLS & certificates

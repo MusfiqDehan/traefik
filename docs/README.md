@@ -1,3 +1,8 @@
+---
+icon: lucide/home
+title: Home
+---
+
 # Documentation
 
 Setup and operations guides for the Traefik infrastructure stack.

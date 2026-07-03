@@ -1,3 +1,7 @@
+---
+icon: lucide/cloud
+---
+
 # Sentry Cloud
 
 **Recommended** for servers with limited RAM (e.g. 12 GB). No containers run on this host for Sentry.

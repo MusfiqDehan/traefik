@@ -1,3 +1,7 @@
+---
+icon: lucide/shield-check
+---
+
 # TLS & Certificates
 
 Traefik supports two certificate sources:
