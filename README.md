@@ -10,9 +10,11 @@ This directory contains the Traefik v3 reverse proxy configuration. It is respon
 ## Files
 
 - [docker-compose.traefik.yml](docker-compose.traefik.yml): runs the Traefik container and creates the shared `traefik_proxy` network
+- [docker-compose.monitoring.yml](docker-compose.monitoring.yml): Prometheus, Grafana, Loki, Promtail, and exporters
 - [traefik.yml](traefik.yml): static Traefik configuration
 - [dynamic/middlewares.yml](dynamic/middlewares.yml): reusable HTTP middlewares
 - [dynamic/tls.yml](dynamic/tls.yml): TLS certificate configuration
+- [monitoring/](monitoring/): Prometheus, Loki, Promtail, and Grafana provisioning configs
 - [certs/README.md](certs/README.md): Cloudflare origin certificate instructions
 
 ## Architecture
@@ -30,19 +32,19 @@ The expected flow is:
 ## Requirements
 
 - Docker and Docker Compose
-- A valid Cloudflare Origin Certificate for `fitssort.com` and `*.fitssort.com`, or a Cloudflare API token so Let's Encrypt can issue one
+- A valid Cloudflare Origin Certificate for `musfiqdehan.com` and `*.musfiqdehan.com`, or a Cloudflare API token so Let's Encrypt can issue one
 - Backend and frontend services configured to join the `traefik_proxy` network
 
 ## DNS Requirements
 
 Wildcard DNS does **not** cover the apex domain. To serve both the landing page and tenant subdomains, create both records:
 
-1. `fitssort.com` → A/AAAA record pointing to your server
-2. `*.fitssort.com` → wildcard record pointing to the same server
+1. `musfiqdehan.com` → A/AAAA record pointing to your server
+2. `*.musfiqdehan.com` → wildcard record pointing to the same server
 
-If you are using Cloudflare proxying, proxy both records to the same origin. If only the wildcard record exists, `https://fitssort.com` will not resolve to your landing page.
+If you are using Cloudflare proxying, proxy both records to the same origin. If only the wildcard record exists, `https://musfiqdehan.com` will not resolve to your landing page.
 
-Do **not** leave extra A/AAAA/CNAME records for the same hostnames pointing to Hostinger parking, an old VPS, or any other origin. DNS round-robin across mixed targets will make `fitssort.com` and `*.fitssort.com` intermittently load different sites depending on which record the resolver returns.
+Do **not** leave extra A/AAAA/CNAME records for the same hostnames pointing to Hostinger parking, an old VPS, or any other origin. DNS round-robin across mixed targets will make `musfiqdehan.com` and `*.musfiqdehan.com` intermittently load different sites depending on which record the resolver returns.
 
 ## Certificate Setup
 
@@ -51,7 +53,7 @@ Traefik supports two certificate sources in this setup:
 1. Cloudflare Origin Certificate from [certs/](certs/)
 2. Let's Encrypt fallback through a Cloudflare DNS-01 challenge
 
-When [certs/origin.pem](certs/origin.pem) and [certs/origin.key](certs/origin.key) exist, [dynamic/tls.yml](dynamic/tls.yml) loads them as the default wildcard certificate. The production backend and frontend routers also declare the `letsencrypt` certificate resolver, so if that origin certificate is missing or not loaded, Traefik can request a browser-trusted certificate from Let's Encrypt for `fitssort.com` and `*.fitssort.com`.
+When [certs/origin.pem](certs/origin.pem) and [certs/origin.key](certs/origin.key) exist, [dynamic/tls.yml](dynamic/tls.yml) loads them as the default wildcard certificate. The production backend and frontend routers also declare the `letsencrypt` certificate resolver, so if that origin certificate is missing or not loaded, Traefik can request a browser-trusted certificate from Let's Encrypt for `musfiqdehan.com` and `*.musfiqdehan.com`.
 
 ### Cloudflare Origin Certificate
 
@@ -64,16 +66,16 @@ To create the certificate:
 
 1. Open Cloudflare Dashboard
 2. Go to **SSL/TLS** → **Origin Server**
-3. Create a certificate for `fitssort.com` and `*.fitssort.com`
+3. Create a certificate for `musfiqdehan.com` and `*.musfiqdehan.com`
 4. Save the certificate as `origin.pem` and the key as `origin.key`
 
 Do not commit the actual certificate files to git.
 
 ### Let's Encrypt Fallback
 
-Wildcard certificates require DNS-01 validation. This setup uses Cloudflare's DNS API, so create a Cloudflare API token that can manage DNS records for the `fitssort.com` zone.
+Wildcard certificates require DNS-01 validation. This setup uses Cloudflare's DNS API, so create a Cloudflare API token that can manage DNS records for the `musfiqdehan.com` zone.
 
-Token permissions: **Zone → DNS → Edit** and **Zone → Zone → Read**, scoped to `fitssort.com`.
+Token permissions: **Zone → DNS → Edit** and **Zone → Zone → Read**, scoped to `musfiqdehan.com`.
 
 Then provide it to Traefik as `CF_DNS_API_TOKEN`. You can export it in the shell:
 
@@ -93,26 +95,138 @@ The ACME account and issued certificates are stored in the Docker volume `traefi
 
 ## Start Traefik
 
-Run Traefik from the repository root:
+Run Traefik from this directory:
 
 ```bash
-docker compose -f shared/traefik/docker-compose.traefik.yml up -d
+docker compose -f docker-compose.traefik.yml up -d
 ```
 
-If using [shared/traefik/.env](.env) for the Let's Encrypt fallback token, run:
+If using [.env](.env) for the Let's Encrypt fallback token:
 
 ```bash
-docker compose --env-file shared/traefik/.env -f shared/traefik/docker-compose.traefik.yml up -d
+docker compose --env-file .env -f docker-compose.traefik.yml up -d
 ```
 
-Traefik must be started before the backend and frontend stacks so the shared `traefik_proxy` network exists when those services come up.
+Traefik must be started before the backend, frontend, and monitoring stacks so the shared `traefik_proxy` network exists when those services come up.
 
-Then start the application stacks:
+Then start application stacks from their respective repositories.
+
+## Monitoring stack (Prometheus, Grafana, Loki)
+
+The monitoring compose file provides metrics, dashboards, and centralized Docker container logs for **all containers on the host** (frontends, backends, databases, Traefik, etc.).
+
+| Service | Role |
+|---------|------|
+| Prometheus | Scrapes host, container, and Traefik metrics (15-day retention) |
+| Grafana | Dashboards at `https://grafana.musfiqdehan.com` |
+| Loki + Promtail | Collects stdout/stderr logs from every Docker container (14-day retention) |
+| node-exporter | Host CPU, RAM, disk, network |
+| cAdvisor | Per-container resource usage |
+
+Prometheus, Loki, and cAdvisor are **not** exposed publicly — only Grafana is routed through Traefik.
+
+On a **12 GB RAM** server, this monitoring stack plus Traefik and your apps is reasonable. Skip self-hosted Sentry (use Sentry Cloud instead) to avoid memory pressure.
+
+### Monitoring prerequisites
+
+1. Traefik running (`traefik_proxy` network exists)
+2. Copy and create basic-auth credentials for the Grafana edge:
 
 ```bash
-docker compose -f apps/gym_app_new_backend/docker-compose.prod.yml up -d --build
-docker compose -f apps/gym_app_new_frontend/docker-compose.prod.yml up -d --build
+htpasswd -cb dynamic/.htpasswd admin 'your-strong-password'
 ```
+
+3. Set `GRAFANA_ADMIN_PASSWORD` in [.env](.env) (copy from [.env.example](.env.example))
+
+### Start monitoring
+
+```bash
+docker compose --env-file .env -f docker-compose.monitoring.yml up -d
+```
+
+### Grafana access
+
+- URL: `https://grafana.musfiqdehan.com`
+- Traefik basic auth: credentials from `dynamic/.htpasswd`
+- Grafana login: `GRAFANA_ADMIN_USER` / `GRAFANA_ADMIN_PASSWORD` from `.env`
+
+Prometheus and Loki datasources are provisioned automatically.
+
+### Recommended dashboards (import in Grafana UI)
+
+- **1860** — Node Exporter Full
+- **193** — Docker cAdvisor
+- **11462** — Traefik 2.x (compatible with Traefik 3 metrics)
+
+### Log queries (Grafana → Explore → Loki)
+
+```logql
+{container_name=~".+"}                              # all containers
+{compose_service="backend"}                          # filter by compose service
+{container_name=~".*postgres.*|.*redis.*"}           # database containers
+```
+
+### Verification
+
+```bash
+# From any container on traefik_proxy:
+docker run --rm --network traefik_proxy curlimages/curl:latest \
+  -s http://prometheus:9090/-/healthy
+
+# Traefik metrics target (after Traefik restart with metrics enabled):
+docker run --rm --network traefik_proxy curlimages/curl:latest \
+  -s http://traefik:8080/metrics | head
+```
+
+## Sentry Cloud (error tracking)
+
+Sentry captures **application errors** (exceptions, stack traces). It does not replace Loki for raw container logs.
+
+**Use [Sentry Cloud](https://sentry.io)** (not self-hosted) on this server. Self-hosted Sentry needs 16 GB+ RAM; with 12 GB, run only Traefik + Prometheus/Grafana/Loki here and send errors to Sentry's hosted service.
+
+No containers or Traefik routes are required for Sentry Cloud — apps send events outbound via the SDK.
+
+### Setup
+
+1. Create an account at [sentry.io](https://sentry.io/signup/)
+2. Create an organization and one project per app (Django API, Next.js frontend, NestJS makeover-api)
+3. Copy each project's **DSN** from **Settings → Projects → [project] → Client Keys (DSN)**
+
+### Application SDK wiring
+
+Set DSNs in each application's environment (or secrets manager):
+
+| App | Package | Env var |
+|-----|---------|---------|
+| Django backend | `sentry-sdk[django]` | `SENTRY_DSN`, `SENTRY_ENVIRONMENT=production` |
+| Next.js frontend | `@sentry/nextjs` | `NEXT_PUBLIC_SENTRY_DSN` |
+| NestJS makeover-api | `@sentry/nestjs` | `SENTRY_DSN` |
+
+DSN format (hosted): `https://<key>@o<org-id>.ingest.<region>.sentry.io/<project-id>`
+
+Example Django settings:
+
+```python
+import sentry_sdk
+
+sentry_sdk.init(
+    dsn=os.environ["SENTRY_DSN"],
+    environment=os.environ.get("SENTRY_ENVIRONMENT", "production"),
+    traces_sample_rate=0.1,
+)
+```
+
+### Startup order (this server)
+
+```bash
+# 1. Traefik
+docker compose --env-file .env -f docker-compose.traefik.yml up -d
+
+# 2. Monitoring (metrics + logs)
+docker compose --env-file .env -f docker-compose.monitoring.yml up -d
+```
+
+Sentry Cloud is configured in application repos only — no third compose stack on this host.
 
 ## How Routing Works
 
@@ -129,7 +243,7 @@ Example label set:
 ```yaml
 labels:
 	- traefik.enable=true
-	- traefik.http.routers.api.rule=Host(`api.fitssort.com`)
+	- traefik.http.routers.api.rule=Host(`api.musfiqdehan.com`)
 	- traefik.http.routers.api.entrypoints=websecure
 	- traefik.http.routers.api.tls=true
 	- traefik.http.routers.api.tls.certresolver=letsencrypt
@@ -147,6 +261,7 @@ The reusable middlewares defined in [dynamic/middlewares.yml](dynamic/middleware
 - `api-ratelimit@file`
 - `ws-headers@file`
 - `redirect-to-https@file`
+- `monitoring-basic-auth@file` — Traefik basic auth for Grafana (`dynamic/.htpasswd`)
 
 ## ADMS device routing (HTTP-only)
 
@@ -175,9 +290,9 @@ HTTPS ADMS paths are **not routed** — reconfigure devices to use `http://` URL
 Configure device firmware or `AccessDeviceEndpoint.base_url`:
 
 ```
-http://{tenant}.fitssort.com/iclock
+http://{tenant}.musfiqdehan.com/iclock
 http://{custom-domain}/iclock
-http://fitssort.com/iclock
+http://musfiqdehan.com/iclock
 ```
 
 Supported endpoints (with or without trailing slash):
@@ -190,10 +305,10 @@ Supported endpoints (with or without trailing slash):
 
 ```bash
 # Must succeed (HTTP)
-curl -v "http://tenant.fitssort.com/iclock/cdata?SN=YOUR_SN"
+curl -v "http://tenant.musfiqdehan.com/iclock/cdata?SN=YOUR_SN"
 
 # Must NOT reach ADMS handlers after migration (HTTPS)
-curl -v "https://tenant.fitssort.com/iclock/cdata?SN=YOUR_SN"
+curl -v "https://tenant.musfiqdehan.com/iclock/cdata?SN=YOUR_SN"
 ```
 
 ### Cloudflare note
@@ -226,6 +341,7 @@ The [traefik.yml](traefik.yml) file configures:
 - Docker provider discovery with `exposedByDefault: false`
 - File provider watching the `dynamic/` directory
 - Let's Encrypt ACME resolver using Cloudflare DNS-01 challenge
+- Prometheus metrics on internal entrypoint `:8080` (scraped by monitoring stack)
 
 The trusted Cloudflare IP ranges are important because they allow Traefik to preserve the correct forwarded headers when the site is behind Cloudflare.
 
@@ -238,17 +354,20 @@ This ensures that:
 - HTTPS routes have a valid certificate immediately on startup
 - Wildcard host rules work correctly for subdomains
 
-The `letsencrypt` ACME resolver in [traefik.yml](traefik.yml) is attached to the backend and frontend production routers. Their `tls.domains` labels explicitly request `fitssort.com` and `*.fitssort.com`, which is required because Traefik cannot infer ACME domains from a regex-only host rule.
+The `letsencrypt` ACME resolver in [traefik.yml](traefik.yml) is attached to the backend and frontend production routers. Their `tls.domains` labels explicitly request `musfiqdehan.com` and `*.musfiqdehan.com`, which is required because Traefik cannot infer ACME domains from a regex-only host rule.
 
 ## Troubleshooting
 
 - If the browser shows a certificate warning, confirm `origin.pem` and `origin.key` exist in [certs/](certs/) and match the Cloudflare Origin Certificate, or confirm `CF_DNS_API_TOKEN` is set so the Let's Encrypt fallback can issue a certificate
-- If `https://fitssort.com` does not open but subdomains do, add an apex DNS record for `fitssort.com`; the wildcard record does not match the root domain
-- If `fitssort.com` or a tenant subdomain sometimes shows a Hostinger parked page, remove every stale A/AAAA/CNAME for that hostname that does not point to the Traefik server. Mixed records can silently round-robin between your app and Hostinger's parking edge.
-- If Let's Encrypt fails, check Traefik logs for ACME errors and confirm the Cloudflare token can manage DNS records for the `fitssort.com` zone
+- If `https://musfiqdehan.com` does not open but subdomains do, add an apex DNS record for `musfiqdehan.com`; the wildcard record does not match the root domain
+- If `musfiqdehan.com` or a tenant subdomain sometimes shows a Hostinger parked page, remove every stale A/AAAA/CNAME for that hostname that does not point to the Traefik server. Mixed records can silently round-robin between your app and Hostinger's parking edge.
+- If Let's Encrypt fails, check Traefik logs for ACME errors and confirm the Cloudflare token can manage DNS records for the `musfiqdehan.com` zone
 - If a service is not reachable, verify it is attached to the `traefik_proxy` network
 - If Traefik cannot find a container, confirm the container has `traefik.enable=true`
 - If forwarded headers look wrong in the backend, confirm requests are passing through the trusted Cloudflare IP ranges in [traefik.yml](traefik.yml)
+- If Grafana returns 401 at the edge, confirm `dynamic/.htpasswd` exists and matches your Traefik basic-auth credentials
+- If Loki shows no logs, confirm Promtail can read `/var/lib/docker/containers` and the Docker socket
+- If Prometheus shows Traefik target down, restart Traefik after enabling `metrics.prometheus` in [traefik.yml](traefik.yml)
 
 ## Notes
 
