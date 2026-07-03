@@ -1,10 +1,11 @@
-Place your Cloudflare Origin Certificate files here:
+# Certificates directory
 
-- origin.pem  — Origin Certificate (public)
-- origin.key  — Private Key
+Place Cloudflare Origin Certificate files here. **Do not commit** `.pem` or `.key` files.
 
-Generate from: Cloudflare Dashboard → SSL/TLS → Origin Server → Create Certificate
+| File | Zone |
+|------|------|
+| `origin.pem` / `origin.key` | `musfiqdehan.com` (default) |
+| `mrdfit.pem` / `mrdfit.key` | `mrdfit.uk` + `*.mrdfit.uk` |
+| (same pattern) | `mrderp.uk`, `mrdhrms.uk`, `mrdlms.uk` |
 
-IMPORTANT: Never commit the actual certificate files to git.
-
-If these files are not available, the production Traefik routers can fall back to Let's Encrypt through the `letsencrypt` DNS-01 resolver configured in [../traefik.yml](../traefik.yml). Set `CF_DNS_API_TOKEN` before starting Traefik so it can create Cloudflare DNS validation records for the `musfiqdehan.com` zone.
+Full setup guide: [docs/tls-and-certificates.md](../docs/tls-and-certificates.md)
