@@ -1,4 +1,4 @@
-# TLS Configuration — fitssort.com + *.fitssort.com
+# TLS Configuration — musfiqdehan.com + *.musfiqdehan.com
 #
 # Primary: Cloudflare Origin Certificate (certs/origin.pem + origin.key).
 # Fallback: Let's Encrypt DNS-01 via Cloudflare API (traefik.yml letsencrypt resolver).
