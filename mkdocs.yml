@@ -5,6 +5,9 @@ site_dir: site
 
 theme:
   name: material
+  features:
+    - content.code.copy
+    - content.code.select
   palette:
     - scheme: default
       primary: indigo
