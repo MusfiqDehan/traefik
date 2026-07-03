@@ -79,7 +79,7 @@ certificatesResolvers:
       storage: /letsencrypt/acme.json
       keyType: EC256
       dnsChallenge:
-        provider: hostinger
+        provider: cloudflare
         resolvers:
           - "1.1.1.1:53"
           - "1.0.0.1:53"
