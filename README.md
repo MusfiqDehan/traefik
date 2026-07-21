@@ -136,3 +136,25 @@ Full instructions: [docs/getting-started.md](docs/getting-started.md)
 ## Author
 
 Infrastructure configuration for the MRD product suite (Fit, ERP, HRMS, LMS) and associated platform services.
+
+## Tenant custom domains
+
+Verified tenant custom domains (e.g. `hello-gym.musfiqdehan.com`) need **explicit** Traefik `Host()` routers so the `customdomains` HTTP-01 ACME resolver can issue certificates. Traefik cannot obtain certs from catch-all `HostRegexp` rules alone.
+
+The Django backend writes [`dynamic/custom-domains.yml`](dynamic/custom-domains.yml) whenever a domain is verified or removed (`sync_traefik_custom_domains`). The file provider watches that directory — no Traefik restart is required after sync.
+
+After TXT ownership verification, the customer must also point the hostname at this origin:
+
+- **CNAME** (preferred) → platform apex, or
+- **A** → this server's public IP
+
+Use DNS-only (grey cloud) on Cloudflare until Let's Encrypt issues the cert; then Full SSL is fine if you re-enable the proxy.
+
+Platform certificates continue to use the DNS-01 `letsencrypt` resolver — do not replace that with HTTP-01 for managed zones.
+
+Bootstrap / repair:
+
+```bash
+docker compose -f apps/gym_app_new_backend/docker-compose.prod.yml exec backend \
+  python manage.py sync_traefik_custom_domains
+```
