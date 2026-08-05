@@ -20,7 +20,7 @@ Default cert files:
 
 Loaded by [dynamic/tls.yml](../dynamic/tls.yml) as the default certificate.
 
-SANs are typically `musfiqdehan.com` and `*.musfiqdehan.com`. That **does not** cover nested hosts such as `client1.ecamp.musfiqdehan.com`. Those use the Let's Encrypt DNS-01 wildcard issued by [dynamic/ecamp.yml](../dynamic/ecamp.yml) (`ecamp.musfiqdehan.com` + `*.ecamp.musfiqdehan.com`).
+SANs are typically `musfiqdehan.com` and `*.musfiqdehan.com`. That **does not** cover nested hosts such as `client1.shop.musfiqdehan.com`. Those use Let's Encrypt DNS-01 wildcards issued by [dynamic/nested-platforms.yml](../dynamic/nested-platforms.yml) (`shop` / `fitness` + `*.shop` / `*.fitness.musfiqdehan.com`).
 
 ### UK platform zones
 
@@ -55,12 +55,14 @@ Production app routers should declare explicit domains on labels:
 - traefik.http.routers.api.tls.domains[0].sans=*.mrdfit.uk
 ```
 
-For nested ecamp tenants (also pre-issued by [dynamic/ecamp.yml](../dynamic/ecamp.yml)):
+For nested shop / fitness tenants (also pre-issued by [dynamic/nested-platforms.yml](../dynamic/nested-platforms.yml)):
 
 ```yaml
 - traefik.http.routers.api.tls.certresolver=letsencrypt
-- traefik.http.routers.api.tls.domains[0].main=ecamp.musfiqdehan.com
-- traefik.http.routers.api.tls.domains[0].sans=*.ecamp.musfiqdehan.com
+- traefik.http.routers.api.tls.domains[0].main=shop.musfiqdehan.com
+- traefik.http.routers.api.tls.domains[0].sans=*.shop.musfiqdehan.com
+- traefik.http.routers.api.tls.domains[1].main=fitness.musfiqdehan.com
+- traefik.http.routers.api.tls.domains[1].sans=*.fitness.musfiqdehan.com
 ```
 
 Traefik cannot infer ACME domains from a regex-only `HostRegexp` rule.

@@ -32,7 +32,8 @@ flowchart TB
 | Domain | Role |
 |--------|------|
 | `musfiqdehan.com` | Personal / platform apex (single-label hosts only) |
-| `*.ecamp.musfiqdehan.com` | Nested tenants (e.g. `client1.ecamp…`) — Let's Encrypt DNS-01 |
+| `*.shop.musfiqdehan.com` | Nested shop tenants (e.g. `client1.shop…`) — Let's Encrypt DNS-01 |
+| `*.fitness.musfiqdehan.com` | Nested fitness tenants (e.g. `client1.fitness…`) — Let's Encrypt DNS-01 |
 | `mrdfit.uk` | Fitness product — tenant subdomains `*.mrdfit.uk` |
 | `mrderp.uk` | ERP product — tenant subdomains `*.mrderp.uk` |
 | `mrdhrms.uk` | HRMS product — tenant subdomains `*.mrdhrms.uk` |

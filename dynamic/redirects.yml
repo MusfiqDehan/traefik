@@ -8,7 +8,7 @@
 #
 # Platform hosts (tenant subdomains):
 #   - musfiqdehan.com          (apex only — no bare *.musfiqdehan.com tenants)
-#   - ecamp.musfiqdehan.com + *.ecamp.musfiqdehan.com  (nested tenants)
+#   - shop/fitness.musfiqdehan.com + *.shop / *.fitness (nested tenants)
 #   - mrdfit.uk + *.mrdfit.uk
 #   - mrderp.uk + *.mrderp.uk
 #   - mrdhrms.uk + *.mrdhrms.uk
@@ -19,7 +19,7 @@ http:
   routers:
     platform-api-http-redirect:
       rule: >-
-        HostRegexp(`^(musfiqdehan\.com|([a-z0-9][a-z0-9-]*\.)?ecamp\.musfiqdehan\.com|([a-z0-9][a-z0-9-]*\.)?(mrdfit|mrderp|mrdhrms|mrdlms)\.uk)$`)
+        HostRegexp(`^(musfiqdehan\.com|([a-z0-9][a-z0-9-]*\.)?(shop|fitness)\.musfiqdehan\.com|([a-z0-9][a-z0-9-]*\.)?(mrdfit|mrderp|mrdhrms|mrdlms)\.uk)$`)
         && (PathPrefix(`/api`) || PathPrefix(`/ninja`) || PathPrefix(`/media`)
         || PathPrefix(`/static`) || PathPrefix(`/ws`))
       entryPoints:
@@ -32,7 +32,7 @@ http:
     custom-api-http-redirect:
       rule: >-
         HostRegexp(`^.+$`)
-        && !HostRegexp(`^(musfiqdehan\.com|([a-z0-9][a-z0-9-]*\.)?ecamp\.musfiqdehan\.com|([a-z0-9][a-z0-9-]*\.)?(mrdfit|mrderp|mrdhrms|mrdlms)\.uk)$`)
+        && !HostRegexp(`^(musfiqdehan\.com|([a-z0-9][a-z0-9-]*\.)?(shop|fitness)\.musfiqdehan\.com|([a-z0-9][a-z0-9-]*\.)?(mrdfit|mrderp|mrdhrms|mrdlms)\.uk)$`)
         && (PathPrefix(`/api`) || PathPrefix(`/ninja`) || PathPrefix(`/media`)
         || PathPrefix(`/static`) || PathPrefix(`/ws`))
       entryPoints:

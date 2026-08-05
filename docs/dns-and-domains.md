@@ -8,13 +8,15 @@ All zones are expected to be proxied through Cloudflare with **SSL/TLS mode: Ful
 
 ## musfiqdehan.com
 
-Apex + explicit single-label hosts (e.g. `grafana.musfiqdehan.com`). A Cloudflare `*.musfiqdehan.com` record covers **one** label only — it does **not** resolve `client1.ecamp.musfiqdehan.com`.
+Apex + explicit single-label hosts (e.g. `grafana.musfiqdehan.com`). A Cloudflare `*.musfiqdehan.com` record covers **one** label only — it does **not** resolve `client1.shop.musfiqdehan.com`.
 
 | Record | Target |
 |--------|--------|
 | `musfiqdehan.com` | Server IP (A/AAAA) |
-| `ecamp.musfiqdehan.com` | Server IP (A/AAAA) — optional apex for the product |
-| `*.ecamp.musfiqdehan.com` | Server IP (A/AAAA) — nested tenants (`client1.ecamp…`) |
+| `shop.musfiqdehan.com` | Server IP (A/AAAA) — shop product apex |
+| `*.shop.musfiqdehan.com` | Server IP (A/AAAA) — nested shop tenants |
+| `fitness.musfiqdehan.com` | Server IP (A/AAAA) — fitness product apex |
+| `*.fitness.musfiqdehan.com` | Server IP (A/AAAA) — nested fitness tenants |
 
 Proxy (orange cloud) is fine for browser traffic. Nested TLS uses Let's Encrypt DNS-01 on the origin (see [TLS & Certificates](tls-and-certificates.md)); keep `CF_DNS_API_TOKEN` valid for this zone.
 
@@ -39,7 +41,7 @@ Remove any old A/AAAA/CNAME records pointing to Hostinger parking, a previous VP
 
 Port-80 → HTTPS redirects for `/api`, `/ninja`, `/media`, `/static`, and `/ws` are defined in [dynamic/redirects.yml](../dynamic/redirects.yml):
 
-- **Platform hosts:** `musfiqdehan.com` (apex), `ecamp.musfiqdehan.com` + `*.ecamp.musfiqdehan.com`, plus apex + `*.` for each UK zone above
+- **Platform hosts:** `musfiqdehan.com` (apex), `shop` / `fitness` + nested `*.shop` / `*.fitness`, plus apex + `*.` for each UK zone above
 - **Custom domains:** all other hostnames (tenant-owned domains)
 
 ADMS device paths (`/iclock`, `/cdata`, etc.) stay on plain HTTP — see [Routing & ADMS](routing-and-adms.md).
@@ -48,6 +50,6 @@ ADMS device paths (`/iclock`, `/cdata`, etc.) stay on plain HTTP — see [Routin
 
 For Let's Encrypt DNS-01, create a token with **Zone → DNS → Edit** and **Zone → Zone → Read** scoped to every zone:
 
-`musfiqdehan.com` (including nested `*.ecamp.musfiqdehan.com`), `mrdfit.uk`, `mrderp.uk`, `mrdhrms.uk`, `mrdlms.uk`
+`musfiqdehan.com` (including nested `*.shop` / `*.fitness.musfiqdehan.com`), `mrdfit.uk`, `mrderp.uk`, `mrdhrms.uk`, `mrdlms.uk`
 
 Set as `CF_DNS_API_TOKEN` in [.env](../.env).

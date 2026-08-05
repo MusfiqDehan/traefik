@@ -1,32 +1,34 @@
 # ─────────────────────────────────────────────
-# Nested platform: *.ecamp.musfiqdehan.com
+# Nested platforms: *.shop / *.fitness.musfiqdehan.com
 #
 # Cloudflare Origin certs for *.musfiqdehan.com cover only ONE DNS label
-# (e.g. ecamp.musfiqdehan.com), NOT client1.ecamp.musfiqdehan.com.
+# (e.g. shop.musfiqdehan.com), NOT client1.shop.musfiqdehan.com.
 #
-# This low-priority router pre-issues a Let's Encrypt wildcard via DNS-01
+# This low-priority router pre-issues Let's Encrypt wildcards via DNS-01
 # (letsencrypt resolver + CF_DNS_API_TOKEN). Application routers with higher
-# priority (default rule-length priority, or explicit priority ≥ 10) take
-# over traffic; this router is only a cert bootstrap / unmatched fallback.
+# priority take over traffic; this router is cert bootstrap / unmatched fallback.
 # ─────────────────────────────────────────────
 
 http:
   routers:
-    ecamp-le-wildcard:
-      rule: HostRegexp(`^([a-z0-9][a-z0-9-]*\.)?ecamp\.musfiqdehan\.com$`)
+    nested-platforms-le-wildcard:
+      rule: HostRegexp(`^([a-z0-9][a-z0-9-]*\.)?(shop|fitness)\.musfiqdehan\.com$`)
       entryPoints:
         - websecure
-      service: ecamp-le-noop@file
+      service: nested-platforms-le-noop@file
       priority: 1
       tls:
         certResolver: letsencrypt
         domains:
-          - main: ecamp.musfiqdehan.com
+          - main: shop.musfiqdehan.com
             sans:
-              - "*.ecamp.musfiqdehan.com"
+              - "*.shop.musfiqdehan.com"
+          - main: fitness.musfiqdehan.com
+            sans:
+              - "*.fitness.musfiqdehan.com"
 
   services:
-    ecamp-le-noop:
+    nested-platforms-le-noop:
       loadBalancer:
         servers:
           - url: "http://127.0.0.1:65535"
