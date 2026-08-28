@@ -29,30 +29,30 @@ labels:
 
 For UK tenant subdomains, use `HostRegexp` in application compose files, e.g. `^[a-z0-9][a-z0-9-]*\.mrdfit\.uk$`.
 
-For nested shop / fitness tenants (`client1.shop.musfiqdehan.com`, `client1.fitness.musfiqdehan.com`), use a HostRegexp plus explicit Let's Encrypt domains (origin `*.musfiqdehan.com` does not cover two labels):
+For nested supermart / fitpulse tenants (`client1.supermart.musfiqdehan.com`, `client1.fitpulse.musfiqdehan.com`), use a HostRegexp plus explicit Let's Encrypt domains (origin `*.musfiqdehan.com` does not cover two labels):
 
 ```yaml
 labels:
   - traefik.enable=true
   - traefik.docker.network=traefik_proxy
-  # Frontend (example — shop; swap shop→fitness for the fitness stack)
-  - traefik.http.routers.shop-frontend.rule=HostRegexp(`^([a-z0-9][a-z0-9-]*\.)?shop\.musfiqdehan\.com$`) && !PathPrefix(`/api`) && !PathPrefix(`/ninja`) && !PathPrefix(`/media`) && !PathPrefix(`/static`) && !PathPrefix(`/ws`) && !PathPrefix(`/iclock`)
-  - traefik.http.routers.shop-frontend.entrypoints=websecure
-  - traefik.http.routers.shop-frontend.tls=true
-  - traefik.http.routers.shop-frontend.tls.certresolver=letsencrypt
-  - traefik.http.routers.shop-frontend.tls.domains[0].main=shop.musfiqdehan.com
-  - traefik.http.routers.shop-frontend.tls.domains[0].sans=*.shop.musfiqdehan.com
-  - traefik.http.routers.shop-frontend.middlewares=security-headers@file,compress@file
-  - traefik.http.services.shop-frontend.loadbalancer.server.port=3000
+  # Frontend (example — supermart; swap supermart→fitpulse for the FitPulse stack)
+  - traefik.http.routers.supermart-frontend.rule=HostRegexp(`^([a-z0-9][a-z0-9-]*\.)?supermart\.musfiqdehan\.com$`) && !PathPrefix(`/api`) && !PathPrefix(`/ninja`) && !PathPrefix(`/media`) && !PathPrefix(`/static`) && !PathPrefix(`/ws`) && !PathPrefix(`/iclock`)
+  - traefik.http.routers.supermart-frontend.entrypoints=websecure
+  - traefik.http.routers.supermart-frontend.tls=true
+  - traefik.http.routers.supermart-frontend.tls.certresolver=letsencrypt
+  - traefik.http.routers.supermart-frontend.tls.domains[0].main=supermart.musfiqdehan.com
+  - traefik.http.routers.supermart-frontend.tls.domains[0].sans=*.supermart.musfiqdehan.com
+  - traefik.http.routers.supermart-frontend.middlewares=security-headers@file,compress@file
+  - traefik.http.services.supermart-frontend.loadbalancer.server.port=3000
   # Backend API (example)
-  - traefik.http.routers.shop-api.rule=HostRegexp(`^([a-z0-9][a-z0-9-]*\.)?shop\.musfiqdehan\.com$`) && (PathPrefix(`/api`) || PathPrefix(`/ninja`) || PathPrefix(`/media`) || PathPrefix(`/static`))
-  - traefik.http.routers.shop-api.entrypoints=websecure
-  - traefik.http.routers.shop-api.tls=true
-  - traefik.http.routers.shop-api.tls.certresolver=letsencrypt
-  - traefik.http.routers.shop-api.tls.domains[0].main=shop.musfiqdehan.com
-  - traefik.http.routers.shop-api.tls.domains[0].sans=*.shop.musfiqdehan.com
-  - traefik.http.routers.shop-api.middlewares=security-headers@file,compress@file,api-ratelimit@file
-  - traefik.http.services.shop-api.loadbalancer.server.port=8000
+  - traefik.http.routers.supermart-api.rule=HostRegexp(`^([a-z0-9][a-z0-9-]*\.)?supermart\.musfiqdehan\.com$`) && (PathPrefix(`/api`) || PathPrefix(`/ninja`) || PathPrefix(`/media`) || PathPrefix(`/static`))
+  - traefik.http.routers.supermart-api.entrypoints=websecure
+  - traefik.http.routers.supermart-api.tls=true
+  - traefik.http.routers.supermart-api.tls.certresolver=letsencrypt
+  - traefik.http.routers.supermart-api.tls.domains[0].main=supermart.musfiqdehan.com
+  - traefik.http.routers.supermart-api.tls.domains[0].sans=*.supermart.musfiqdehan.com
+  - traefik.http.routers.supermart-api.middlewares=security-headers@file,compress@file,api-ratelimit@file
+  - traefik.http.services.supermart-api.loadbalancer.server.port=8000
 ```
 
 Also allow those hosts in the app (`ALLOWED_HOSTS` / Next.js host checks) and join the `traefik_proxy` external network.
