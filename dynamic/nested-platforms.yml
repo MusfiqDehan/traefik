@@ -1,8 +1,8 @@
 # ─────────────────────────────────────────────
-# Nested platforms: *.shop / *.fitness.musfiqdehan.com
+# Nested platforms: *.supermart / *.fitpulse.musfiqdehan.com
 #
 # Cloudflare Origin certs for *.musfiqdehan.com cover only ONE DNS label
-# (e.g. shop.musfiqdehan.com), NOT client1.shop.musfiqdehan.com.
+# (e.g. supermart.musfiqdehan.com), NOT client1.supermart.musfiqdehan.com.
 #
 # This low-priority router pre-issues Let's Encrypt wildcards via DNS-01
 # (letsencrypt resolver + CF_DNS_API_TOKEN). Application routers with higher
@@ -12,7 +12,7 @@
 http:
   routers:
     nested-platforms-le-wildcard:
-      rule: HostRegexp(`^([a-z0-9][a-z0-9-]*\.)?(shop|fitness)\.musfiqdehan\.com$`)
+      rule: HostRegexp(`^([a-z0-9][a-z0-9-]*\.)?(supermart|fitpulse)\.musfiqdehan\.com$`)
       entryPoints:
         - websecure
       service: nested-platforms-le-noop@file
@@ -20,12 +20,12 @@ http:
       tls:
         certResolver: letsencrypt
         domains:
-          - main: shop.musfiqdehan.com
+          - main: supermart.musfiqdehan.com
             sans:
-              - "*.shop.musfiqdehan.com"
-          - main: fitness.musfiqdehan.com
+              - "*.supermart.musfiqdehan.com"
+          - main: fitpulse.musfiqdehan.com
             sans:
-              - "*.fitness.musfiqdehan.com"
+              - "*.fitpulse.musfiqdehan.com"
 
   services:
     nested-platforms-le-noop:
