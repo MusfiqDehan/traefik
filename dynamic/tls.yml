@@ -2,7 +2,7 @@
 #
 # Platform domains:
 #   musfiqdehan.com (apex + single-label *.musfiqdehan.com via origin cert)
-#   *.shop / *.fitness.musfiqdehan.com — NOT covered by origin *.musfiqdehan.com;
+#   *.supermart / *.fitpulse.musfiqdehan.com — NOT covered by origin *.musfiqdehan.com;
 #     use Let's Encrypt DNS-01 (see dynamic/nested-platforms.yml)
 #   mrdfit.uk, mrderp.uk, mrdhrms.uk, mrdlms.uk (+ wildcard tenant subdomains)
 #
@@ -10,7 +10,7 @@
 # Fallback: Let's Encrypt DNS-01 via Cloudflare API (traefik.yml letsencrypt resolver).
 #
 # Default cert below covers musfiqdehan.com / *.musfiqdehan.com (one label).
-# Nested hosts like client1.shop.musfiqdehan.com require LE (nested-platforms.yml).
+# Nested hosts like client1.supermart.musfiqdehan.com require LE (nested-platforms.yml).
 
 tls:
   stores:
