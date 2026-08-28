@@ -1,6 +1,6 @@
 # Production Edge Infrastructure — Traefik Reverse Proxy
 
-Docker-based reverse proxy and observability layer for a **multi-tenant SaaS platform** serving fitness, ERP, HRMS, and LMS products across multiple domains, with real-time APIs, WebSockets, and biometric device integrations.
+Docker-based reverse proxy and observability layer for a **multi-tenant SaaS platform** serving FitPulse, ERP, HRMS, and LMS products across multiple domains, with real-time APIs, WebSockets, and biometric device integrations.
 
 ## What this project does
 
@@ -32,8 +32,8 @@ flowchart TB
 | Domain | Role |
 |--------|------|
 | `musfiqdehan.com` | Personal / platform apex (single-label hosts only) |
-| `*.shop.musfiqdehan.com` | Nested shop tenants (e.g. `client1.shop…`) — Let's Encrypt DNS-01 |
-| `*.fitness.musfiqdehan.com` | Nested fitness tenants (e.g. `client1.fitness…`) — Let's Encrypt DNS-01 |
+| `*.supermart.musfiqdehan.com` | Nested supermart tenants (e.g. `client1.supermart…`) — Let's Encrypt DNS-01 |
+| `*.fitpulse.musfiqdehan.com` | Nested FitPulse tenants (e.g. `client1.fitpulse…`) — Let's Encrypt DNS-01 |
 | `mrdfit.uk` | Fitness product — tenant subdomains `*.mrdfit.uk` |
 | `mrderp.uk` | ERP product — tenant subdomains `*.mrderp.uk` |
 | `mrdhrms.uk` | HRMS product — tenant subdomains `*.mrdhrms.uk` |
