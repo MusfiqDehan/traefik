@@ -1,6 +1,6 @@
 # ─────────────────────────────────────────────
 # Traefik v3 — Static Configuration
-# Domain: musfiqdehan.com (apex) + *.shop / *.fitness.musfiqdehan.com (nested)
+# Domain: musfiqdehan.com (apex) + *.supermart / *.fitpulse.musfiqdehan.com (nested)
 #          + mrdfit.uk, mrderp.uk, mrdhrms.uk, mrdlms.uk (wildcard tenants)
 # ─────────────────────────────────────────────
 
