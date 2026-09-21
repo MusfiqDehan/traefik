@@ -12,7 +12,7 @@
 http:
   routers:
     nested-platforms-le-wildcard:
-      rule: HostRegexp(`^([a-z0-9][a-z0-9-]*\.)?(supermart|fitpulse)\.musfiqdehan\.com$`)
+      rule: HostRegexp(`^([a-z0-9][a-z0-9-]*\.)?(supermart|fitpulse|wufud|staging\.wufud)\.musfiqdehan\.com$`)
       entryPoints:
         - websecure
       service: nested-platforms-le-noop@file
@@ -26,6 +26,12 @@ http:
           - main: fitpulse.musfiqdehan.com
             sans:
               - "*.fitpulse.musfiqdehan.com"
+          - main: wufud.musfiqdehan.com
+            sans:
+              - "*.wufud.musfiqdehan.com"
+          - main: staging.wufud.musfiqdehan.com
+            sans:
+              - "*.staging.wufud.musfiqdehan.com"
 
   services:
     nested-platforms-le-noop:
