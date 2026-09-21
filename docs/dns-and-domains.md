@@ -17,6 +17,10 @@ Apex + explicit single-label hosts (e.g. `grafana.musfiqdehan.com`). A Cloudflar
 | `*.supermart.musfiqdehan.com` | Server IP (A/AAAA) — nested supermart tenants |
 | `fitpulse.musfiqdehan.com` | Server IP (A/AAAA) — FitPulse product apex |
 | `*.fitpulse.musfiqdehan.com` | Server IP (A/AAAA) — nested FitPulse tenants |
+| `wufud.musfiqdehan.com` | Server IP (A/AAAA) — Wufud product apex |
+| `*.wufud.musfiqdehan.com` | Server IP (A/AAAA) — nested Wufud tenants |
+| `staging.wufud.musfiqdehan.com` | Server IP (A/AAAA) — Wufud staging apex |
+| `*.staging.wufud.musfiqdehan.com` | Server IP (A/AAAA) — nested Wufud staging tenants |
 
 Proxy (orange cloud) is fine for browser traffic. Nested TLS uses Let's Encrypt DNS-01 on the origin (see [TLS & Certificates](tls-and-certificates.md)); keep `CF_DNS_API_TOKEN` valid for this zone.
 
