@@ -18,9 +18,26 @@ Default cert files:
 - `certs/origin.pem` — public certificate
 - `certs/origin.key` — private key
 
-Loaded by [dynamic/tls.yml](../dynamic/tls.yml) as the default certificate.
+Loaded by [dynamic/tls.yml](../dynamic/tls.yml) as the **default** certificate only (fallback for hosts like `blog.musfiqdehan.com`).
 
-SANs are typically `musfiqdehan.com` and `*.musfiqdehan.com`. That **does not** cover nested hosts such as `client1.supermart.musfiqdehan.com`. Those use Let's Encrypt DNS-01 wildcards issued by [dynamic/nested-platforms.yml](../dynamic/nested-platforms.yml) (`supermart` / `fitpulse` + `*.supermart` / `*.fitpulse.musfiqdehan.com`).
+SANs are typically `musfiqdehan.com` and `*.musfiqdehan.com`. That wildcard **does** match `fitpulse.musfiqdehan.com` (one label), which conflicts with the public Let's Encrypt cert needed for Cloudflare **Full (strict)** on the proxied apex. Do **not** add `origin.pem` to the `certificates:` list in `tls.yml` — only list exported LE files there. Origin stays under `stores.default.defaultCertificate` for unmatched SNIs.
+
+That origin wildcard **does not** cover nested hosts such as `client1.supermart.musfiqdehan.com` or `hellogym.fitpulse.musfiqdehan.com`. Those use Let's Encrypt DNS-01 wildcards issued by [dynamic/nested-platforms.yml](../dynamic/nested-platforms.yml) (`supermart` / `fitpulse` + `*.supermart` / `*.fitpulse.musfiqdehan.com`).
+
+After issue or renew, export the fitpulse (or supermart) wildcard to disk:
+
+```bash
+./scripts/export-nested-le-cert.sh fitpulse.musfiqdehan.com
+```
+
+Traefik picks up file changes to `dynamic/tls.yml` automatically; re-export after ACME renewals (cron weekly is enough).
+
+### Cloudflare DNS for FitPulse
+
+| Record | Proxy | Why |
+|--------|-------|-----|
+| `fitpulse.musfiqdehan.com` | Proxied (orange) | Edge cert + DDoS; origin must present publicly trusted LE (not origin CA). |
+| `*.fitpulse.musfiqdehan.com` | DNS only (grey) | Universal SSL does not cover two-level wildcards; browsers terminate TLS on the VPS with the LE `*.fitpulse.musfiqdehan.com` cert. |
 
 ### UK platform zones
 
@@ -72,9 +89,9 @@ ACME state is stored in the Docker volume `traefik_letsencrypt` at `/letsencrypt
 ## Certificate selection flow
 
 ```
-HTTPS request → origin cert in tls.yml matches SNI?
-  Yes → serve origin cert
-  No  → router has certresolver=letsencrypt?
-          Yes → request/use LE cert for tls.domains
-          No  → default cert or TLS error
+HTTPS request → LE file cert in tls.yml certificates[] matches SNI?
+  Yes → serve LE file cert (fitpulse apex + tenants)
+  No  → ACME store cert from nested-platforms router?
+          Yes → serve LE from acme.json (e.g. supermart apex)
+  No  → defaultCertificate (origin.pem) for other *.musfiqdehan.com
 ```

@@ -1,16 +1,14 @@
 # TLS Configuration
 #
-# Platform domains:
-#   musfiqdehan.com (apex + single-label *.musfiqdehan.com via origin cert)
-#   *.supermart / *.fitpulse.musfiqdehan.com — NOT covered by origin *.musfiqdehan.com;
-#     use Let's Encrypt DNS-01 (see dynamic/nested-platforms.yml)
-#   mrdfit.uk, mrderp.uk, mrdhrms.uk, mrdlms.uk (+ wildcard tenant subdomains)
+# Cloudflare Origin cert SAN: musfiqdehan.com + *.musfiqdehan.com (one DNS label).
+# That wildcard matches fitpulse.musfiqdehan.com but NOT hellogym.fitpulse.musfiqdehan.com.
 #
-# Primary: Cloudflare Origin Certificate(s) in certs/.
-# Fallback: Let's Encrypt DNS-01 via Cloudflare API (traefik.yml letsencrypt resolver).
+# IMPORTANT: Do not list origin.pem under `certificates:` — Traefik prefers it over
+# the more specific Let's Encrypt file for fitpulse.musfiqdehan.com. Keep origin as
+# defaultCertificate only (fallback for other *.musfiqdehan.com hosts).
 #
-# Default cert below covers musfiqdehan.com / *.musfiqdehan.com (one label).
-# Nested hosts like client1.supermart.musfiqdehan.com require LE (nested-platforms.yml).
+# Nested platforms (fitpulse / supermart tenants) use LE DNS-01 via nested-platforms.yml.
+# Export fitpulse wildcard to certs/fitpulse-le.{pem,key} after issue/renew (see scripts/).
 
 tls:
   stores:
@@ -19,7 +17,7 @@ tls:
         certFile: /certs/origin.pem
         keyFile: /certs/origin.key
   certificates:
-    - certFile: /certs/origin.pem
-      keyFile: /certs/origin.key
+    - certFile: /certs/fitpulse-le.pem
+      keyFile: /certs/fitpulse-le.key
       stores:
         - default
