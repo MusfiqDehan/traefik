@@ -35,6 +35,7 @@ services:
       - ./traefik.yml:/etc/traefik/traefik.yml:ro
       # Dynamic configuration (TLS + middlewares)
       - ./dynamic:/etc/traefik/dynamic:ro
+      - styledesk_traefik_generated:/etc/traefik/dynamic/styledesk-generated:ro
       # Optional origin certificates
       - ./certs:/certs:ro
       # Persistent ACME account and certificates for Let's Encrypt fallback
@@ -63,4 +64,6 @@ networks:
     driver: bridge
 
 volumes:
+  styledesk_traefik_generated:
+    name: styledesk_traefik_generated
   traefik_letsencrypt:
