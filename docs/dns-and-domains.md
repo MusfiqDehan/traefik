@@ -57,3 +57,12 @@ For Let's Encrypt DNS-01, create a token with **Zone → DNS → Edit** and **Zo
 `musfiqdehan.com` (including nested `*.supermart` / `*.fitpulse.musfiqdehan.com`), `mrdfit.uk`, `mrderp.uk`, `mrdhrms.uk`, `mrdlms.uk`
 
 Set as `CF_DNS_API_TOKEN` in [.env](../.env).
+
+
+## StyleDesk generated tenant domains
+
+StyleDesk adds `styledesk.musfiqdehan.com` and `*.styledesk.musfiqdehan.com` to the existing nested DNS-01 wildcard router. Its application router uses priority 50, above certificate bootstrap. Existing applications and ADMS HTTP routing are preserved.
+
+The domain worker writes only `styledesk-domains.json` in the `styledesk_traefik_generated` Docker volume. Traefik mounts it read-only at `/etc/traefik/dynamic/styledesk-generated` beneath the watched file-provider directory. Application containers never receive the Docker socket. Verified tenant aliases use the existing `customdomains` HTTP-01 resolver, with ACME challenge paths preserved. Start Traefik first to create the shared volume; enable the dedicated backend domain worker after its restricted database grants are applied.
+
+The worker validates TXT ownership, routable DNS and proxy destination, writes configuration atomically, and waits for valid HTTPS before enabling host resolution. Failures retry with backoff. Tenant feature revocation rejects resolution immediately and removes generated routes during the next reconciliation cycle. Payment callbacks remain on stable platform subdomains.
